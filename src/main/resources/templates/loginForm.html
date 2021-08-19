@@ -17,10 +17,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>로그인</title>
- <!-- 
-  <link rel="stylesheet" href="/css/xxx.css" />
-  <script src="/js/xxx.js" defer></script>
-  --> 
+ <!--  <link rel="stylesheet" href="/css/xxx.css" />
+  <script src="/js/xxx.js" defer></script> --> 
   <style>
   	.global-wrap .main main{
   	 display:flex;
@@ -50,23 +48,23 @@
       </div>
     </div>
     <div class="main">
-      <div class="inner main-inner">
+  		<div class="inner main-inner">
       	<main>
-     	 <form class="frm" action="/login" method="post">
-      	   <h3 class="frm-title">로그인</h3>
-      	   <ul>
-      			<li class="frm-ctr"><input type="text" name="email" id="email" placeholder="아이디를 입력하세요"
-      			th:value="${loginForm.email}"/></li>
-      			<li th:errors="#{loginForm.email}" th:errorclass="field-error">오류메세지</li>
-      			<li class="frm-ctr"><input type="text" name="pw" id="pw" placeholder="비밀번호를 입력하세요"
-      			th:value="${loginForm.pw}"/></li>
-      			<li th:errors="${loginForm.pw}" th:errorclass="field-error">오류메세지]</li>
-      			<li class="frm-ctr"><button type="submit">로그인</button></li>
-      		</ul> 
-    	  </form>
-     	 </main>
+     	 		<form class="frm" action="/login" method="post">
+      	  	<h3 class="frm-title">로그인</h3>
+      	   	<ul> 
+      				<li><input type="text" class="frm-ctr" name="email" id="email" placeholder="아이디를 입력하세요"
+      				th:value="${loginForm.email}"/></li>
+      				<li th:errors="${loginForm.email}" th:errorclass="field-msg">오류메세지</li>
+      				<li><input class="frm-ctr" type="password" name="pw" id="pw" placeholder="비밀번호를 입력하세요"
+      				th:value="${loginForm.pw}"/></li>
+      				<li th:errors="${loginForm.pw}" th:errorclass="field-msg">오류메세지</li>
+      				<li><button class="frm-ctr" type="submit">로그인</button></li>
+      			</ul> 
+    	  	</form>
+     	 	</main>
      	</div>
-     </div>
+    </div>
     <div class="foot">
       <div class="inner foot-inner" th:insert="${footer}">
         <footer>푸터</footer>
