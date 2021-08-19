@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" 
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragment/main::copyParam(
+      	~{::title},	<!--/* title 		대체 */-->
+      	~{::link},	<!--/* links 		추가 */-->
+      	~{},				<!--/* scripts 	생략 */-->
+      	~{},				<!--/* style */-->
+      	~{},				<!--/* header */-->
+      	_,					<!--/* nav */ 기본값 사용 */--> 
+      	~{::main},  <!--/* main 		대체 */-->
+      	_  					<!--/* footer */ 기본값 사용 */--> 
+      )}">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>로그인</title>
+  
+  <link rel="stylesheet" href="/css/xxx.css" />
+  <script src="/js/xxx.js" defer></script>
+  
+</head>
+<body>
+  <div class="global-wrap">
+    <div class="hdr">
+      <div class="inner hdr-inner">
+        <header>헤더</header>
+      </div>
+    </div>
+    <div class="main">
+      <div class="inner main-inner">
+      	<main>메인</div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="inner foot-inner" th:insert="${footer}">
+        <footer>푸터</footer>
+      </div>
+    </div>    
+  </div>
+</body>
+</html>

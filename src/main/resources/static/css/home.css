@@ -1,0 +1,13 @@
+@charset "UTF-8";
+/* main */
+.global-wrap .main .product-wrap{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+  padding:30px;
+  gap:20px;
+
+}
+.global-wrap .main .product-wrap .product-item .product-img{
+  border:1px solid #eee;
+  border-radius: 10%;
+}

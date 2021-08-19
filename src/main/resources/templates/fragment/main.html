@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko"
+			xmlns:th="http://www.thymeleaf.org"
+      th:fragment="copyParam(title,links,scripts,style,header,nav,main,footer)">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:replace=${title}>아리에떼[[Ariete]]</title>
+  
+  <!-- common css & script -->
+  <link rel="stylesheet" href="/css/normalize.css" />
+  <link rel="stylesheet" href="/css/common.css" />
+  <link rel="stylesheet" href="/css/frame/main.css" />
+  
+  <!-- font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700&family=Karla:ital,wght@1,400;1,700&family=Noto+Sans+KR:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+	  
+  <!-- Per-page placeholder for additional links -->
+  <th:block th:replace="${links}"></th:block>
+  <th:block th:replace="${scripts}"></th:block>
+  <th:block th:replace="${style}"></th:block>  
+</head>
+<body>
+  <div class="global-wrap">
+    <div class="upm">
+      <div class="inner upm-inner">
+        <div class="logo">
+        	<a href="" th:href="@{/}">
+        		<i class="fas fa-mug-hot"></i>
+        		<span class="logo-title">아리에떼[[Ariete]]</span>
+        	</a>
+        </div>
+        <div class="upm-menu">
+          <div class="login">
+          	<a href="" th:href="@{/login}">로그인</a>
+          </div>
+          <div class="join">
+          	<a href="" th:href="@{/members/join}">회원가입</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hdr" th:if="${!#strings.isEmpty(header)}">
+      <div class="inner hdr-inner" th:insert="${header}">
+        header
+      </div>
+    </div>
+    <div class="gnb">
+      <div class="inner gnb-inner" th:insert="${nav}">
+        <nav>
+          <ul class="depth1">
+            <li class="item">
+              <a href="#">menu1</a>
+              <ul class="depth2">
+                <li class="item"><a href="#">menu-1</a></li>
+                <li class="item"><a href="#">menu-2</a></li>
+              </ul>
+            </li>
+            <li class="item">
+              <a href="#">menu2</a>
+              <ul class="depth2">
+                <li class="item"><a href="#">menu-1</a></li>
+                <li class="item"><a href="#">menu-2</a></li>
+              </ul>
+            </li>
+            <li class="item">
+              <a href="#">menu3</a>
+              <ul class="depth2">
+                <li class="item"><a href="#">menu-1</a></li>
+                <li class="item"><a href="#">menu-2</a></li>
+              </ul>
+            </li>
+            <li class="item">
+              <a href="#">menu4</a>
+              <ul class="depth2">
+                <li class="item"><a href="#">menu-1</a></li>
+                <li class="item"><a href="#">menu-2</a></li>
+              </ul>
+            </li>
+            <li class="item">
+              <a href="#">menu5</a>
+              <ul class="depth2">
+                <li class="item"><a href="#">menu-1</a></li>
+                <li class="item"><a href="#">menu-2</a></li>
+              </ul>
+            </li>
+            <li class="item">
+              <a href="#" th:href=@{/product/list}>상품관리</a>
+            </li>            
+          </ul>
+        </nav>
+      </div>
+    </div>   
+    <div class="main">
+      <div class="inner main-inner" th:insert="${main}">
+				main
+      </div>
+    </div>
+    <div class="foot">
+      <div class="inner foot-inner" th:insert="${footer}">
+        <footer>
+          <div class="copyright">Copyright ©  Co.,Ltd. All Rights Reserved</div>
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

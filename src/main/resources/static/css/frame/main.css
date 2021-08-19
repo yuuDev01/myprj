@@ -1,0 +1,111 @@
+@charset "UTF-8";
+
+/* layout */
+.global-wrap{
+  display:grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 40px auto 30px auto auto;
+  grid-template-areas: "upm" "hdr" "gnb" "main" "foot";
+  box-sizing: border-box;
+}
+.upm{grid-area: upm;} 
+.hdr{grid-area: hdr;} 
+.gnb{grid-area: gnb;} 
+.main{grid-area: main;} 
+.foot{grid-area: foot;}
+.upm, .hdr, .gnb, .main, .foot{box-sizing: border-box;}
+
+/* upm */
+  /* upm & footer */
+.global-wrap .inner{
+  width:80%; height: 100%;
+  max-width:1000px;
+  margin: 0 auto;
+} 
+
+.global-wrap .upm{
+  /* background-color: #333;
+  color:#eee; */
+}
+.global-wrap .upm .upm-inner{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.global-wrap .upm .logo{
+	font-size:1.5rem;
+	margin-left: 10px;
+}
+/* .global-wrap .upm .logo a:hover{
+	color:pink;
+	transition:color .2s ease-in;
+}	 */
+.global-wrap .upm .logo .logo-title{
+	font-size:1.2rem;
+	font-weight:bold;
+}
+.global-wrap .upm .upm-inner .upm-menu{
+  /* display:grid;
+  grid-template-columns: repeat(2,1fr);
+  justify-items: center; */
+  display:flex;
+
+}
+.global-wrap .upm .upm-inner .upm-menu .login,
+.global-wrap .upm .upm-inner .upm-menu .join{
+  text-align: center;
+  /* margin: 0 5px; */
+  font-size: 0.8rem;
+  padding:3px;
+}
+.global-wrap .upm .upm-inner .upm-menu a{
+  display: block; 
+}
+
+/* gnb */
+.global-wrap .gnb .item{
+  flex: 1;
+  line-height: 30px;
+}
+.global-wrap .gnb .item a {
+  display:block;
+  padding-left:10px;
+}
+.global-wrap .gnb .depth1 {
+  display:flex;
+  justify-content: center;
+  text-align: center;
+  background-color: #333; color:#fff;
+  font-weight: bold;
+}
+.global-wrap .gnb .depth1 > .item{
+  position:relative;
+}
+.global-wrap .gnb .depth1 > .item:hover{
+  color:#ccc;
+}
+.global-wrap .gnb .depth1 > .item:hover .depth2{
+  display:block;
+  position:absolute;
+  top:1.7rem; left:10px;
+  background-color: white; color:#444;
+  border:1px solid #eee;
+  border-radius: 10%;
+  box-shadow: 0px 5px 5px 3px rgba(0,0,0,.2);
+  transition: all .5s ease-out;
+}    
+.global-wrap .gnb .depth2 {
+  display:none;
+  width:100%;
+  font-weight: normal;   
+}
+.global-wrap .gnb .depth2 > .item:hover {
+  color:#00c;
+}
+ /* foot */
+ .global-wrap .foot .inner{
+ 	border-top:1px solid #ccc;
+ }
+.global-wrap .foot .copyright{
+  text-align: center; padding: 10px 0; font-size:0.8rem;
+}
