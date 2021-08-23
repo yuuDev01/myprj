@@ -8,12 +8,12 @@ import lombok.Data;
 
 @Data
 public class LoginForm {
-	@NotBlank(message="공백문자(x)")
+	@NotBlank
 	@Email
-	@Size(min = 4 , max =40)
+	@Size(min = 4,max = 40)
 	private String email;
 	
-	@NotBlank(message="공백문자(x)")
-	@Size(min = 4, max = 8)
+	@NotBlank
+	@Size(min = 4,max = 12)
 	private String pw;
 }

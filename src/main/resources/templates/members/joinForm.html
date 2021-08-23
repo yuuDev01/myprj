@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko" 
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragment/main::copyParam(
+      	~{::title}, <!--/* title 		대체 */-->
+      	~{::link},	<!--/* links 		추가 */-->
+      	~{},				<!--/* scripts 	생략 */-->
+      	~{::style},				<!--/* style */-->
+      	~{},				<!--/* header */-->
+      	_,					<!--/* nav */ 기본값 사용 */-->       	
+      	~{::main},  <!--/* main 		대체 */-->
+      	_					<!--/* footer */ 기본값 사용 */--> 
+      )}">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>회원가입</title>
+  
+  <link rel="stylesheet" href="/css/member/joinForm.css" />
+  <script src="/js/xxx.js" defer></script>
+  <style>
+  	.global-wrap .inner.main-inner main{
+  		display:flex;
+			justify-content: center;
+			padding:50px;
+  	}
+  	.global-wrap .main .inner.main-inner main .frm{
+  		margin:0 auto;
+  		width:250px;
+  	}
+  </style>
+</head>
+<body>
+  <div class="global-wrap">
+    <div class="hdr">
+      <div class="inner hdr-inner">
+        <header>헤더</header>
+      </div>
+    </div>
+    <div class="main">
+      <div class="inner main-inner">
+      	<main>
+					<form class="frm" th:action="@{/members/join}" th:method="post" th:object="${joinForm}" >
+						<ul>
+							<li><h3 class="title">회원 가입</h3></li>
+							<li><label for="email">아이디</label></li>
+							<li><input type="text" th:field="*{email}"/></li>
+							<li th:errors="*{email}" th:errorclass="field"></li>
+							<li><label for="pw">비밀번호</label></li>
+							<li><input type="password" th:field="*{pw}"/></li>
+							<li><label for="pwchk">비밀번호 확인</label></li>
+							<li><input type="password" th:field="*{pwchk}"></li>
+							<li th:errors="*{pwchk}" th:errorclass="field-msg"></li>
+							<li><label for="tel">전화번호</label></li>
+							<li><input type="tel" name="tel" th:field="*{tel}"/></li>
+							<li><label for="nickname">별칭</label></li>
+							<li><input type="text" th:field="*{nickname}" /></li>
+							<li th:errors="*{nickname}" th:errorclass="field-msg"></li>
+							<li><label for="gender">성별</label></li>
+							<li>
+							<th:block th:each="item :${gender}">
+									<label th:for="${#ids.next('gender')}" th:text="${item.decode}">여</label>
+									<input type="radio" th:field="*{gender}" th:value="${item.decode}" />
+								</th:block>
+							</li>
+							<li><label for="region">지역</label></li>
+							<li><select th:field="*{region}">
+									<option value="">==선택==</option>
+									<option th:each="item : ${region}"
+													th:value="${item.code}" th:text="${item.decode}">울산</option>
+							</select></li>
+							<li><label for="birth">생년월일</label></li>
+							<li><input type="date" th:field="*{birth}" /></li>
+							<li th:errors="*{birth}" th:errorclass="field-msg"></li>					
+							<li><label for="hobby">취미</label></li>
+							<li>
+								<div class="hobby">
+									<th:block th:each="item : ${hobby}">
+									<lable th:for="${#ids.next('hobby')}" th:text="${item.decode}">등산</lable>
+									<input type="checkbox" th:field="*{hobby}" th:value="${item.code}"/>
+									</th:block>
+								</div>
+							</li>
+							<li><span class="errmsg" id="errmsg_birth"></span></li>
+							<li>
+								<input type="checkbox" th:field="*{letter}" /><span>뉴스레터 수신에 동의합니다.</span>
+							</li>								
+							<li><input type="submit" value="회원가입" id="joinBtn"></li>
+						</ul>
+					</form>      	
+      	
+      	</main>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="inner foot-inner" th:insert="${footer}">
+        <footer>푸터</footer>
+      </div>
+    </div>    
+  </div>
+</body>
+</html>
