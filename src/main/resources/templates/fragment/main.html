@@ -50,7 +50,7 @@
           </div>
           <div class="join">
           	<!-- <a href="" th:href="@{/members/myinfo}">내정보([[${session.loginMember.nickname}]])</a> -->
-          	<a href="" th:href="@{/members/myinfo}" th:text="|내정보(${session.loginMember.nickname})|">내정보([[${session.loginMember.nickname}]])</a>
+          	<a href="" th:href="@{/mypage/myinfo}" th:text="|내정보(${session.loginMember.nickname})|">내정보([[${session.loginMember.nickname}]])</a>
           </div>
         </div>
       </div>
@@ -114,7 +114,7 @@
     <div class="foot">
       <div class="inner foot-inner" th:insert="${footer}">
         <footer>
-          <div class="copyright">Copyright © KH울산정보교육원 Co.,Ltd. All Rights Reserved</div>
+          <div class="copyright">Copyright ©  Co.,Ltd. All Rights Reserved</div>
         </footer>
       </div>
     </div>

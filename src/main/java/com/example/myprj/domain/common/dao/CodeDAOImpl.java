@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @AllArgsConstructor
 public class CodeDAOImpl implements CodeDAO {
-	private final JdbcTemplate jt;
+private final JdbcTemplate jt;
 	
 	@Override
 	public List<Code> getCode(String pcode) {

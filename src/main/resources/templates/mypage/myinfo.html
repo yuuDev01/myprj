@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" 
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragment/main::copyParam(
+      	~{::title},	<!--/* title 		대체 */-->
+      	~{::link},	<!--/* links 		추가 */-->
+      	~{},				<!--/* scripts 	생략 */-->
+      	~{::style},	<!--/* style */-->
+      	~{},				<!--/* header */-->
+      	~{::nav},		<!--/* nav */ 기본값 사용 */--> 
+      	~{::main},  <!--/* main 		대체 */-->
+      	_  					<!--/* footer */ 기본값 사용 */--> 
+      )}">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>내페이지</title>
+  
+  <link rel="stylesheet" href="/css/xxx.css" />
+  <script src="/js/xxx.js" defer></script>
+  <style>
+	  .global-wrap .gnb .depth1 {
+	 		 background-color: #c60055; color: #fff;
+	 	}
+  </style>
+  
+</head>
+<body>
+  <div class="global-wrap">
+    <div class="hdr">
+      <div class="inner hdr-inner">
+        <header>헤더</header>
+      </div>
+    </div>
+    <div class="gnb">
+      <div class="inner gnb-inner">
+        <nav>
+          <ul class="depth1">
+            <li class="item">
+              <a href="#" th:text="#{mypage.menu.depth1.order1}">menu1</a>
+              <ul class="depth2">
+                <li class="item"><a href="#" th:text="#{mypage.menu.depth2.order1}">menu-1</a></li>
+                <li class="item"><a href="#" th:text="#{mypage.menu.depth2.order2}">menu-2</a></li>
+              </ul>
+            </li>
+            <li class="item">
+              <a href="#" th:text="#{mypage.menu.depth1.order2}">menu2</a>
+<!--               <ul class="depth2">
+                <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order1}">menu-1</a></li>
+                <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order2}">menu-2</a></li>
+              </ul> -->
+            </li>
+            <li class="item">
+              <a href="#" th:text="#{mypage.menu.depth1.order3}">menu3</a>
+<!--               <ul class="depth2">
+                <li class="item"><a href="#">menu-1</a></li>
+                <li class="item"><a href="#">menu-2</a></li>
+              </ul> -->
+            </li>          
+          </ul>        
+        </nav>
+      </div>
+    </div>      
+    <div class="main">
+      <div class="inner main-inner">
+      	<main>메인</main>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="inner foot-inner" th:insert="${footer}">
+        <footer>푸터</footer>
+      </div>
+    </div>    
+  </div>
+</body>
+</html>

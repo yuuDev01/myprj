@@ -1,5 +1,5 @@
 @charset "UTF-8";
-
+/* {outline:1px solid red;}*/
 /* layout */
 .global-wrap{
   display:grid;
@@ -64,7 +64,8 @@
 
 /* gnb */
 .global-wrap .gnb .item{
-  flex: 1;
+  /*flex: 1;*/
+  width:120px;
   line-height: 30px;
 }
 .global-wrap .gnb .item a {
@@ -73,7 +74,7 @@
 }
 .global-wrap .gnb .depth1 {
   display:flex;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   background-color: #333; color:#fff;
   font-weight: bold;

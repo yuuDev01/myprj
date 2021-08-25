@@ -45,24 +45,30 @@
 					<form class="frm" th:action="@{/members/join}" th:method="post" th:object="${joinForm}" >
 						<ul>
 							<li><h3 class="title">회원 가입</h3></li>
+      				<li th:errors="*{global}" th:errorclass="field-msg">
+								<p th:each="err : ${#fields.globalErrors()}"
+																			 th:text="${err}">글로벌 오류 메시지</p>      				
+      				</li>							
 							<li><label for="email">아이디</label></li>
 							<li><input type="text" th:field="*{email}"/></li>
-							<li th:errors="*{email}" th:errorclass="field"></li>
+							<li th:errors="*{email}" th:errorclass="field-msg"></li>
 							<li><label for="pw">비밀번호</label></li>
 							<li><input type="password" th:field="*{pw}"/></li>
+							<li th:errors="*{pw}" th:errorclass="field-msg"></li>
 							<li><label for="pwchk">비밀번호 확인</label></li>
 							<li><input type="password" th:field="*{pwchk}"></li>
 							<li th:errors="*{pwchk}" th:errorclass="field-msg"></li>
 							<li><label for="tel">전화번호</label></li>
 							<li><input type="tel" name="tel" th:field="*{tel}"/></li>
+							<li th:errors="*{tel}" th:errorclass="field-msg"></li>
 							<li><label for="nickname">별칭</label></li>
 							<li><input type="text" th:field="*{nickname}" /></li>
-							<li th:errors="*{nickname}" th:errorclass="field-msg"></li>
+							<li th:errors="*{nickname}" th:errorclass="field-msg"></li>							
 							<li><label for="gender">성별</label></li>
 							<li>
-							<th:block th:each="item :${gender}">
-									<label th:for="${#ids.next('gender')}" th:text="${item.decode}">여</label>
-									<input type="radio" th:field="*{gender}" th:value="${item.decode}" />
+								<th:block th:each="item : ${gender}">
+									<label th:for="${#ids.next('gender')}" th:text="${item.decode}">남</label>
+									<input type="radio" th:field="*{gender}" th:value="${item.decode}"/>
 								</th:block>
 							</li>
 							<li><label for="region">지역</label></li>
@@ -72,8 +78,8 @@
 													th:value="${item.code}" th:text="${item.decode}">울산</option>
 							</select></li>
 							<li><label for="birth">생년월일</label></li>
-							<li><input type="date" th:field="*{birth}" /></li>
-							<li th:errors="*{birth}" th:errorclass="field-msg"></li>					
+							<li><input type="date" th:field="*{birth}" /></li>		
+							<li th:errors="*{birth}" th:errorclass="field-msg"></li>				
 							<li><label for="hobby">취미</label></li>
 							<li>
 								<div class="hobby">
@@ -85,7 +91,7 @@
 							</li>
 							<li><span class="errmsg" id="errmsg_birth"></span></li>
 							<li>
-								<input type="checkbox" th:field="*{letter}" /><span>뉴스레터 수신에 동의합니다.</span>
+								<input type="checkbox" th:field="*{letter}"/><span>뉴스레터 수신에 동의합니다.</span>
 							</li>								
 							<li><input type="submit" value="회원가입" id="joinBtn"></li>
 						</ul>
