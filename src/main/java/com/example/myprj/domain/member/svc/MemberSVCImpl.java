@@ -16,13 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @AllArgsConstructor
-@Transactional //1.트랜잭성 보장 2.서비스층에서 사용
+//@Transactional(readOnly=true) //1.트랜잭성 보장 2.서비스층에서 사용
 public class MemberSVCImpl implements MemberSVC{
-
 private final MemberDAO memberDAO;
 	
 	//가입
 	@Override
+	@org.springframework.transaction.annotation.Transactional(readOnly = false)
 	public void join(MemberDTO memberDTO) {
 		long id = memberDAO.insert(memberDTO);
 
@@ -33,6 +33,15 @@ private final MemberDAO memberDAO;
 		}		
 	}
 
+	@Override
+	public MemberDTO findByEmail(String email) {
+		//회원정보 가져오기
+		MemberDTO memberDTO = memberDAO.findByEmail(email);
+		//회원의 취미 가져오기
+		memberDTO.setHobby(memberDAO.getHobby(memberDTO.getId()));
+		return memberDTO;
+	}
+	
 	//이메일 중복체크
 	@Override
 	public boolean isExistEmail(String email) {
@@ -50,9 +59,21 @@ private final MemberDAO memberDAO;
 		return mdto;
 	}
 	
+	//회원 우무체크
 	@Override
+	public boolean isMemember(String email, String pw) {
+		return memberDAO.isLogin(email, pw);
+	}
+	
+	//회원 수정
+	@Override
+	//@Transactional(readOnly = false)
 	public void update(long id, MemberDTO memberDTO) {
+		//회원수정
 		memberDAO.update(id, memberDTO);
+		//취미수정
+		memberDAO.delHobby(id);
+		memberDAO.addHobby(id,memberDTO.getHobby());
 	}
 
 	//이메일 찾기
@@ -80,5 +101,20 @@ private final MemberDAO memberDAO;
 	public void delete(String email) {
 		memberDAO.delete(email);
 	}
-
+	
+	//email로 회원 탈퇴
+	@Override
+	public void outMember(String email, String pw) {
+		memberDAO.outMember(email, pw);
+	}
+	
+	//비밀번호 변경
+	@Override
+	public boolean changePw(String email, String prePw, String postPw) {
+//		boolean isChanged = false;
+//		if(memberDAO.changePw(prePw, postPw)==1) isChanged = true;		 
+//		return isChanged;
+		
+		return memberDAO.changePw(email, prePw, postPw) == 1 ? true : false;
+	}
 }

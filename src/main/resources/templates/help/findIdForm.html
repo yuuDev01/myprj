@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko" 
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragment/main::copyParam(
+      	~{::title},	<!--/* title 		대체 */-->
+      	~{::link},	<!--/* links 		추가 */-->
+      	~{::script},				<!--/* scripts 	생략 */-->
+      	~{::style},	<!--/* style */-->
+      	~{},				<!--/* header */-->
+      	~{::nav},		<!--/* nav */ 기본값 사용 */--> 
+      	~{::main},  <!--/* main 		대체 */-->
+      	_  					<!--/* footer */ 기본값 사용 */--> 
+      )}">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Help</title>
+  
+  <link rel="stylesheet" href="/css/xxx.css" th:href="@{/css/help/help.css}"/>
+  <script src="/js/common/ajaxCall.js" defer></script>
+  <script>
+    let $hiddens = null;
+  
+    //찾은 아이디 표시
+		const displayEmail = res => {
+      Array.from($hiddens).forEach(ele=>ele.classList.remove("hidden"));
+
+      if(res.rtcd == '00'){
+	      email.textContent = res.data;			    	  
+      }else{
+    	  email.textContent = res.data;
+      }
+		}
+		
+		//Ajax Call 통신오류 발생시
+		const displayError = err => {	email.textContent = err };		
+		
+  	const init = e => {
+  		$hiddens = document.querySelectorAll(".box1 .hidden");
+	  	
+	    findBtn.addEventListener("click",e=>{
+	      console.log('click!');
+	      //유효성 체크
+	      if(tel.value.trim().length == 0) {
+	    	  Array.from($hiddens).forEach(ele=>ele.classList.remove("hidden"));
+	    	  email.textContent = '전화번호를 입력하세요';
+	    	  tel.focus();
+	    	  tel.select();
+	    	  return;
+	      }
+	      if(birth.value.trim().length == 0) {
+	    	  Array.from($hiddens).forEach(ele=>ele.classList.remove("hidden"));
+	    	  email.textContent = '생년월일을 입력하세요';
+	    	  birth.focus();
+	    	  birth.select();
+	    	  return;
+	      }
+	      
+	      //ajax call!
+	      const url = '/api/members/email';
+	      const payload = {
+	    		tel: tel.value,
+	    		birth: birth.value
+	      };
+				request.post(url,payload)
+							 .then(res=>res.json())
+							 .then(res=>displayEmail(res))
+							 .catch(err=> {
+								 displayError(err);
+								 console.log(err);
+							 });
+	    });
+  	}
+  	//현재 문서가 dom객체가 메모리에 로딩되면.
+    window.addEventListener("DOMContentLoaded", init);
+  	
+  </script>    
+  <style>  
+    .box1 {
+      margin: 100px auto;
+      width:250px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5%;
+    }
+    .box1 dl {
+      display: grid;
+      grid-template-columns: 70px 3fr;
+      gap:5px;
+      margin:10px 0;
+    }
+    .box1 dd { margin-left:0; width:100%;}
+    .box1 dd input {width:100%;}  
+    
+    .box1 button{
+      width:100%;
+	 		background-color: #1b5e20; color: #fff;
+      font-weight: bold;
+      border: none; outline: none;
+      padding:5px;
+    }
+    .box1 button:hover{
+      cursor: pointer;
+    }
+    .box1 h3 {text-align: center;}
+    .box1 .hidden { display:none;}
+    
+  </style>
+  
+</head>
+<body>
+  <div class="global-wrap">
+    <div class="hdr">
+      <div class="inner hdr-inner">
+        <header>헤더</header>
+      </div>
+    </div>
+    <div class="gnb">
+      <div class="inner gnb-inner">
+        <nav th:replace="~{fragment/gnb/menu::help}">메뉴</nav>
+      </div>
+    </div>      
+    <div class="main">
+      <div class="inner main-inner">
+      	<main>
+      	
+				  <div class="box1">
+				    <h3>아이디 찾기</h3>
+				    <dl th:object="${findEmailReq}">
+				      <dt><label for="">전화번호</label></dt>
+				      <dd><input type="tel" th:field="*{tel}" placeholder="010-1234-5678"></dd>
+				      <dt><label for="">생년월일</label></dt>
+				      <dd><input type="date" th:field="*{birth}"></dd>
+				      <dt class="hidden"><span class="email">아이디</sapn></dt>
+				      <dd class="hidden"><span class="email" id="email"></span></dd>
+				    </dl>
+				    <button type="button" id='findBtn'>아이디찾기</button>
+				  </div>      	
+      	
+      	</main>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="inner foot-inner" th:insert="${footer}">
+        <footer>푸터</footer>
+      </div>
+    </div>    
+  </div>
+</body>
+</html>

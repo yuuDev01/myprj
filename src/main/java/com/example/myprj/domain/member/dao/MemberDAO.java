@@ -28,6 +28,13 @@ public interface MemberDAO {
 	void delHobby(long id);
 	
 	/**
+	 * 취미조회 by id
+	 * @param id
+	 * @return
+	 */
+	List<String> getHobby(long id);
+	
+	/**
 	 * 조회 by id
 	 * @param id
 	 * @return
@@ -77,6 +84,13 @@ public interface MemberDAO {
 	void delete(String email);
 	
 	/**
+	 * 탈퇴
+	 * @param email
+	 */
+	void outMember(String email, String pw);
+	
+	
+	/**
 	 * 이메일 찾기
 	 * @param tel
 	 * @param birth
@@ -92,5 +106,12 @@ public interface MemberDAO {
 	 * @return
 	 */
 	String findPw(String email,String tel,Date birth);
+
+	/**
+	 * 회원 비밀번호 변경
+	 * @param prePw
+	 * @param postPw
+	 */
+	int changePw(String email, String prePw, String postPw);
 
 }

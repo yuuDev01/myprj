@@ -16,14 +16,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>내페이지</title>
+  <title>Help</title>
   
-  <link rel="stylesheet" href="/css/xxx.css" />
+  <link rel="stylesheet" href="/css/xxx.css" th:href="@{/css/help/help.css}"/>
   <script src="/js/xxx.js" defer></script>
   <style>
-	  .global-wrap .gnb .depth1 {
-	 		 background-color: #c60055; color: #fff;
-	 	}
+
   </style>
   
 </head>
@@ -36,12 +34,29 @@
     </div>
     <div class="gnb">
       <div class="inner gnb-inner">
-        <nav th:replace="~{fragment/gnb/menu::myinfo}"></nav>
+        <nav>
+          <ul class="depth1">
+            <li class="item">
+              <a href="#" th:href="@{/help/findId}" th:text="#{help.menu.depth1.order1}">menu1</a>
+<!--               <ul class="depth2">
+                <li class="item"><a href="#" th:text="#{mypage.menu.depth2.order1}">menu-1</a></li>
+                <li class="item"><a href="#" th:text="#{mypage.menu.depth2.order2}">menu-2</a></li>
+              </ul> -->
+            </li>
+            <li class="item">
+              <a href="#" th:href="@{/help/findPw}" th:text="#{help.menu.depth1.order2}">menu2</a>
+<!--               <ul class="depth2">
+                <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order1}">menu-1</a></li>
+                <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order2}">menu-2</a></li>
+              </ul> -->
+            </li>       
+          </ul>        
+        </nav>
       </div>
     </div>      
     <div class="main">
       <div class="inner main-inner">
-      	<main>메인</main>
+      	<main>help메인</main>
       </div>
     </div>
     <div class="foot">

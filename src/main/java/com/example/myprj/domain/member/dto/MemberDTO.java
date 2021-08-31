@@ -19,6 +19,7 @@ public class MemberDTO {
 	private List<String> hobby;			//취미	
 	private String letter;			//  letter    char(1),
 	private Long fid;					//  fid       number(10),
+	private String status;
 	private	LocalDateTime cdate;//  cdate     timestamp default systimestamp,
 	private LocalDateTime udate;//  udate     timestamp,
 }

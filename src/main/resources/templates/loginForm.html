@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko" 
       xmlns:th="http://www.thymeleaf.org"
@@ -7,7 +8,7 @@
       	~{},				<!--/* scripts 	생략 */-->
       	~{::style},				<!--/* style */-->
       	~{},				<!--/* header */-->
-      	_,					<!--/* nav */ 기본값 사용 */--> 
+      	~{::nav},		<!--/* nav 		대체 */--> 
       	~{::main},  <!--/* main 		대체 */-->
       	_  					<!--/* footer */ 기본값 사용 */--> 
       )}">
@@ -28,6 +29,9 @@
   	.global-wrap .main .frm{
   		width:250px;
   		margin:100px 0;
+  		border: 1px solid #ccc;
+  		border-radius: 5%;
+  		padding:10px;
   	}
   	.global-wrap .main .frm .frm-ctr {
   		width:100%;
@@ -35,6 +39,25 @@
   	.global-wrap .main .frm .frm-title{
   		text-align: center;
   	}
+  	.global-wrap .main .frm ul li{
+  		padding:5px;
+  	}
+  	.global-wrap .main .frm ul li:last-child{
+  		display:flex;
+  		justify-content: space-between;
+  		font-size: 0.8em;
+  	}
+  	.global-wrap .main .frm ul li:last-child a:hover{
+  		text-decoration: underline;
+  	}
+  	.global-wrap .main .frm button[type='submit']{
+  	  background-color: #333; color:#fff;
+  	  padding:5px;
+  	  font-weight:bold;
+  	 }
+  	 .global-wrap .main .frm button[type='submit']:hover{
+  	 	cursor: pointer;
+  	 }
   </style>
 </head>
 <body>
@@ -44,6 +67,11 @@
         <header>헤더</header>
       </div>
     </div>
+    <div class="gnb">
+      <div class="inner gnb-inner">
+        <nav th:replace="~{fragment/gnb/menu::global}">메뉴</nav>
+      </div>
+    </div>      
     <div class="main">
       <div class="inner main-inner">
       	<main>
@@ -61,6 +89,11 @@
       									 th:field="*{pw}"/></li>
 							<li th:errors="*{pw}" th:errorclass="field-msg">오류메세지</li>      									 
       				<li><button class="frm-ctr" type="submit" th:text="#{btn.login}" >로그인</button></li>
+      				<li>
+      					<a href="#" th:href="@{/help/findId}">아이디찾기</a>
+      					<a href="#" th:href="@{/help/findPw}">비밀번호찾기</a>
+      					<a href="#" th:href="@{/members/join}">회원가입</a>
+      					</li>
       			</ul>
       		</form>
       	</main>

@@ -61,49 +61,8 @@
       </div>
     </div>
     <div class="gnb">
-      <div class="inner gnb-inner" th:insert="${nav}">
-        <nav>
-          <ul class="depth1">
-            <li class="item">
-              <a href="#" th:text="#{gnb.menu.depth1.order1}">menu1</a>
-              <ul class="depth2">
-                <li class="item"><a href="#">menu-1</a></li>
-                <li class="item"><a href="#">menu-2</a></li>
-              </ul>
-            </li>
-            <li class="item">
-              <a href="#" th:text="#{gnb.menu.depth1.order2}">menu2</a>
-              <ul class="depth2">
-                <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order1}">menu-1</a></li>
-                <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order2}">menu-2</a></li>
-              </ul>
-            </li>
-            <li class="item">
-              <a href="#">menu3</a>
-              <ul class="depth2">
-                <li class="item"><a href="#">menu-1</a></li>
-                <li class="item"><a href="#">menu-2</a></li>
-              </ul>
-            </li>
-            <li class="item">
-              <a href="#">menu4</a>
-              <ul class="depth2">
-                <li class="item"><a href="#">menu-1</a></li>
-                <li class="item"><a href="#">menu-2</a></li>
-              </ul>
-            </li>
-            <li class="item">
-              <a href="#">menu5</a>
-              <ul class="depth2">
-                <li class="item"><a href="#">menu-1</a></li>
-                <li class="item"><a href="#">menu-2</a></li>
-              </ul>
-            </li>
-            <li class="item">
-              <a href="#" th:href=@{/product/list}>상품관리</a>
-            </li>            
-          </ul>
-        </nav>
+      <div class="inner gnb-inner">
+        <nav th:replace="${nav}">메뉴</nav>
       </div>
     </div>   
     <div class="main">
@@ -114,7 +73,7 @@
     <div class="foot">
       <div class="inner foot-inner" th:insert="${footer}">
         <footer>
-          <div class="copyright">Copyright ©  Co.,Ltd. All Rights Reserved</div>
+          <div class="copyright">Copyright © Co.,Ltd. All Rights Reserved</div>
         </footer>
       </div>
     </div>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+	<nav th:fragment="global">
+   <ul class="depth1">
+	   <li class="item">
+	     <a href="#" th:text="#{gnb.menu.depth1.order1}">menu1</a>
+	     <ul class="depth2">
+	       <li class="item"><a href="#">menu-1</a></li>
+	       <li class="item"><a href="#">menu-2</a></li>
+	     </ul>
+	   </li>
+	   <li class="item">
+	     <a href="#" th:text="#{gnb.menu.depth1.order2}">menu2</a>
+	     <ul class="depth2">
+	       <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order1}">menu-1</a></li>
+	       <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order2}">menu-2</a></li>
+	     </ul>
+	   </li>
+	   <li class="item">
+	     <a href="#">menu3</a>
+	     <ul class="depth2">
+	       <li class="item"><a href="#">menu-1</a></li>
+	       <li class="item"><a href="#">menu-2</a></li>
+	     </ul>
+	   </li>
+	   <li class="item">
+	     <a href="#">menu4</a>
+	     <ul class="depth2">
+	       <li class="item"><a href="#">menu-1</a></li>
+	       <li class="item"><a href="#">menu-2</a></li>
+	     </ul>
+	   </li>
+	   <li class="item">
+	     <a href="#">menu5</a>
+	     <ul class="depth2">
+	       <li class="item"><a href="#">menu-1</a></li>
+	       <li class="item"><a href="#">menu-2</a></li>
+	     </ul>
+	   </li>
+	   <li class="item">
+	     <a href="#" th:href=@{/product/list}>상품관리</a>
+	   </li>            
+ 		</ul>
+ 	</nav>
+ 	
+  <nav th:fragment="help">
+    <ul class="depth1">
+      <li class="item">
+        <a href="#" th:href="@{/help/findId}" th:text="#{help.menu.depth1.order1}">menu1</a>
+<!--               <ul class="depth2">
+                <li class="item"><a href="#" th:text="#{mypage.menu.depth2.order1}">menu-1</a></li>
+                <li class="item"><a href="#" th:text="#{mypage.menu.depth2.order2}">menu-2</a></li>
+              </ul> -->
+      </li>
+      <li class="item">
+        <a href="#" th:href="@{/help/findPw}" th:text="#{help.menu.depth1.order2}">menu2</a>
+<!--               <ul class="depth2">
+                <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order1}">menu-1</a></li>
+                <li class="item"><a href="#" th:text="#{gnb.menu.depth2.order2}">menu-2</a></li>
+              </ul> -->
+      </li>       
+    </ul>        
+  </nav> 	
+  
+  <nav th:fragment="myinfo">
+    <ul class="depth1">
+      <li class="item">
+        <a href="#" th:text="#{mypage.menu.depth1.order1}">menu1</a>
+        <ul class="depth2">
+          <li class="item">
+          	<a href="#" th:href="@{|/members/edit|}" th:text="#{mypage.menu.depth2.order1}">menu-1</a>
+          </li>
+          <li class="item">
+          	<a href="#" th:href="@{/members/pw}" th:text="#{mypage.menu.depth2.order2}">menu-2</a>
+          </li>
+          <li class="item">
+          	<a href="#" th:href="@{|/members/out|}" th:text="#{mypage.menu.depth2.order3}">menu-2</a>
+          </li>
+        </ul>
+      </li>        
+    </ul>        
+  </nav>  
+</body>
+</html>
