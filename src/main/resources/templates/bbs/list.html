@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragment/main::copyParam(
+      	~{::title},	<!--/* title 		대체 */-->
+      	~{::link},	<!--/* links 		추가 */-->
+      	~{::script},				<!--/* scripts 	생략 */-->
+      	~{::style},				<!--/* style */-->
+      	~{},				<!--/* header */-->
+      	~{::nav},					<!--/* nav */ 기본값 사용 */--> 
+      	~{::main},  <!--/* main 		대체 */-->
+      	_  					<!--/* footer */ 기본값 사용 */--> 
+      )}">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>커뮤니치</title>
+
+<link rel="stylesheet" href="/css/xxx.css" />
+  <style>
+    .main .wrap{
+      display: flex;
+      justify-content: center;
+      margin : 50px 0;
+    }
+
+    .main .wrap .wrap-bbs{
+      width: 80%;
+    }
+    
+    .main  .wrap .wrap-bbs table th{
+      text-align: center;
+    }
+
+    .main  .wrap .wrap-bbs table tr td:nth-last-child(2){
+      text-align: center;
+    }
+    .main .wrap .wrap-bbs table tr td:nth-last-child(1){
+      text-align: right;
+    }
+    .main .wrap .wrap-bbs .bbs-title{
+      text-align: center;
+    }
+
+    .main .wrap .wrap-bbs-btns{
+      text-align: right;
+    }
+  </style>
+  <!-- <script src="/js/xxx.js" defer></script> -->
+<script>
+  	window.addEventListener("DOMContentLoaded",init);
+  	
+  	function init(e){
+  		writeBtn.addEventListener("click",e=>{
+  			location.href = '/bbs/';
+  		});
+  	}
+  
+  </script>
+</head>
+<body>
+	<div class="global-wrap">
+		<div class="hdr">
+			<div class="inner hdr-inner">
+				<header>헤더</header>
+			</div>
+		</div>
+		<div class="gnb">
+			<div class="inner gnb-inner">
+				<nav th:replace="~{fragment/gnb/menu::global}">메뉴</nav>
+			</div>
+		</div>
+		<div class="main">
+			<div class="inner main-inner">
+				<main>
+					<div class="wrap">
+						<div class="wrap-bbs">
+							<table
+								class="table table-sm table-hover table-bordered caption-top">
+								<caption class="bbs-title">
+									<h3>게시글 목록</h3>
+								</caption>
+								<thead>
+									<tr class="table-secondary">
+										<th scope="col">번호</th>
+										<th scope="col">제목</th>
+										<th scope="col">작성자</th>
+										<th scope="col">작성일</th>
+										<th scope="col">조회수</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">1</th>
+										<td>글입니다</td>
+										<td>테스터1</td>
+										<td>2021-09-01</td>
+										<td>11</td>
+									</tr>
+								</tbody>
+							</table>
+						<div class="wrap-bbs-btns">
+							<button type="button" id="writeBtn" class="btn btn-sm btn-danger">글작성</button>
+						</div>
+						</div>
+					</div>
+				</main>
+			</div>
+		</div>
+		<div class="foot">
+			<div class="inner foot-inner">
+				<footer>푸터</footer>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

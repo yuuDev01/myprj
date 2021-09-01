@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko" 
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragment/main::copyParam(
+      	~{::title},	<!--/* title 		대체 */-->
+      	~{::link},	<!--/* links 		추가 */-->
+      	~{},				<!--/* scripts 	생략 */-->
+      	~{::style},				<!--/* style */-->
+      	~{},				<!--/* header */-->
+      	~{::nav},					<!--/* nav */ 기본값 사용 */--> 
+      	~{::main},  <!--/* main 		대체 */-->
+      	_  					<!--/* footer */ 기본값 사용 */--> 
+      )}">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>게시글 작성</title>
+  
+  <link rel="stylesheet" href="/css/xxx.css" />
+  <style>
+    .wrap #writeForm {
+      width:600px;
+      margin: 50px auto;
+    }
+    .wrap #writeForm label{
+      letter-spacing: 0.5em;
+    }
+  </style>  
+  <script src="/js/xxx.js" defer></script>
+  
+</head>
+<body>
+  <div class="global-wrap">
+    <div class="hdr">
+      <div class="inner hdr-inner">
+        <header>헤더</header>
+      </div>
+    </div>
+    <div class="gnb">
+      <div class="inner gnb-inner">
+        <nav th:replace="~{fragment/gnb/menu::global}">메뉴</nav>
+      </div>
+    </div>       
+    <div class="main">
+      <div class="inner main-inner">
+      	<main>
+					 <div class="wrap">
+					    <form action="" class="row gx-3 gy-2 align-items-center" id="writeForm">
+					      <p class="fs-3 text-center">게시글 작성</p>
+					      <div class="row mb-3">
+					        <label for="category" class="col-sm-2 col-form-label text-center">분류</label>
+					        <div class="col-sm-10">
+					          <select class="form-select" id="category">
+					            <option selected >선택</option>
+					            <option value="1">One</option>
+					            <option value="2">Two</option>
+					            <option value="3">Three</option>
+					          </select>
+					        </div>
+					      </div>
+					      <div class="row mb-3">
+					        <label for="title" class="col-sm-2 col-form-label text-center">제목</label>
+					        <div class="col-sm-10">
+					          <input type="text" class="form-control" id="title">
+					        </div>
+					      </div>
+					      <div class="row mb-3">
+					        <label for="nickname" class="col-sm-2 col-form-label text-center">작성자</label>
+					        <div class="col-sm-10">
+					          <input type="text" class="form-control" id="nickname">
+					        </div>
+					      </div>
+					      <div class="row mb-3">
+					        <label for="content" class="col-sm-2 col-form-label text-center">내용</label>
+					        <div class="col-sm-10">
+					          <textarea rows="10" class="form-control" id="content" ></textarea>
+					        </div>
+					      </div>
+					      <div class="row mb-3">
+					        <label for="file" class="col-sm-2 col-form-label text-center">첨부</label>
+					        <div class="col-sm-10">
+					          <input type="file" class="form-control" id="file">
+					        </div>
+					      </div>
+					      <div class="row mb-3">
+					        <div class="col-sm-12 text-sm-end">
+					          <button type="submit" class="btn btn-primary">등록</button>
+					          <button type="button" class="btn btn-primary">취소</button>
+					          <button type="button" class="btn btn-primary">목록</button>
+					        </div>
+					      </div>
+					    </form>
+					  </div>      	
+      	</main>
+			</div>
+		</div>
+		<div class="foot">
+			<div class="inner foot-inner">
+				<footer>푸터</footer>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
