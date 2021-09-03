@@ -21,6 +21,6 @@ public class BoardDTO {
 	private Long bstep;						//	BSTEP	NUMBER(3,0)
 	private Long bindent;					//	BINDENT	NUMBER(3,0)
 	private String status;				//	STATUS	CHAR(1 BYTE)
-	private Timestamp bcdat;			//	BCDATE	TIMESTAMP(6)
+	private Timestamp bcdate;			//	BCDATE	TIMESTAMP(6)
 	private Timestamp budate;			//	BUDATE	TIMESTAMP(6)
 }

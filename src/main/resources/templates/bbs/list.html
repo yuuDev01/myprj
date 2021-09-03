@@ -91,12 +91,14 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<th scope="row">1</th>
-										<td>글입니다</td>
-										<td>테스터1</td>
-										<td>2021-09-01</td>
-										<td>11</td>
+									<tr th:each="item : ${list}">
+										<th scope="row" th:text="${item.bnum}">1</th>
+										<td th:text="${item.btitle}">
+										<a href="#" th:href="@{|/bbs/${item.bnum}/|}">제목</a>
+										</td>
+										<td th:text="${item.bnickname}">작성자</td>
+										<td th:text="${item.bcdate}">2021-09-01</td>
+										<td th:text="${item.bhit}">11</td>
 									</tr>
 								</tbody>
 							</table>
