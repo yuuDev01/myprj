@@ -1,4 +1,5 @@
-spring-oauth.properties
+application-oauth.properties
+log.**
 HELP.md
 .gradle
 build/
