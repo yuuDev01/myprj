@@ -248,4 +248,17 @@ public class BoardDAOImpl implements BoardDAO {
 				throw new IllegalArgumentException(bnum + " 번 게시글 번호를 찾을 수 없습니다!");
 			};
 		}
+		
+		//조회수 증가
+		@Override
+		public void updateBhit(Long bnum) {
+		// TODO Auto-generated method stub
+			StringBuffer sql = new StringBuffer();
+			sql.append("update board ");
+			sql.append(" set bhit = bhit +1 ");
+			sql.append(" where bnum  = ? ");
+			
+			jt.update(sql.toString(), bnum);
+			
+		}
 	}

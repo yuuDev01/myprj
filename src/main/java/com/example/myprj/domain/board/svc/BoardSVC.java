@@ -5,7 +5,6 @@ import java.util.List;
 import com.example.myprj.domain.board.dto.BoardDTO;
 
 public interface BoardSVC {
-
 	/**
 	 * 원글 작성
 	 * @param boardDTO
@@ -19,15 +18,7 @@ public interface BoardSVC {
 	 * @return
 	 */
 	Long reply(BoardDTO boardDTO);
-	
-	/**
-	 * 게시글 수정
-	 * @param bnum
-	 * @param boardDTO
-	 * @return
-	 */
-	Long modifyItem(Long bnum, BoardDTO boardDTO);
-	
+		
 	/**
 	 * 게시글 목록
 	 * @return
@@ -40,6 +31,14 @@ public interface BoardSVC {
 	 * @return
 	 */
 	BoardDTO itemDetail(Long bnum);
+	
+	/**
+	 * 게시글 수정
+	 * @param bnum
+	 * @param boardDTO
+	 * @return
+	 */
+	Long modifyItem(Long bnum, BoardDTO boardDTO);	
 	
 	/**
 	 * 게시글 삭제

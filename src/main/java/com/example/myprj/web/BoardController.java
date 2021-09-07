@@ -1,5 +1,7 @@
 package com.example.myprj.web;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +25,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.myprj.domain.board.dto.BoardDTO;
 import com.example.myprj.domain.board.svc.BoardSVC;
 import com.example.myprj.domain.common.dao.CodeDAO;
+import com.example.myprj.domain.common.dto.MetaOfUploadFile;
+import com.example.myprj.domain.common.dto.UpLoadFileDTO;
+import com.example.myprj.domain.common.file.FileStore;
 import com.example.myprj.domain.common.mail.MailService;
 import com.example.myprj.domain.member.svc.MemberSVC;
 import com.example.myprj.web.api.JsonResult;
@@ -34,125 +39,165 @@ import com.example.myprj.web.form.member.EditForm;
 
 import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/bbs")
-@AllArgsConstructor
 public class BoardController {
-	
+
 	private final BoardSVC boardSVC;
 	private final CodeDAO codeDAO;
+	private final FileStore fileStore;
 	
 	@ModelAttribute("category")
 	public List<Code> hobby(){
 		List<Code> list = codeDAO.getCode("A05");
-		log.info("code-hobby:{}",list);
+		log.info("code-category:{}",list);
 		return list;
 	}
 	
-	//게시글 목록
-	@GetMapping("/list")
-	public String list(Model model) {
-		List<BoardDTO> list = boardSVC.list();
-		model.addAttribute("list",list);
-		return "bbs/list";
-	}
 	
-	//게시글 작성
+	//원글 작성 양식
 	@GetMapping("/")
 	public String writeForm(
-//			@ModelAttribute WriteForm writeForm,
+			//@ModelAttribute WriteForm wrtieForm
 			Model model,
 			HttpServletRequest request
 			) {
+		
 		WriteForm writeForm = new WriteForm();
+		
 		HttpSession session = request.getSession(false);
-		log.info("sesion:",session);
 		if(session != null && session.getAttribute("loginMember") != null) {
-			LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
+			LoginMember loginMember = 
+					(LoginMember)session.getAttribute("loginMember");
+			
 			writeForm.setBid(loginMember.getId());
 			writeForm.setBemail(loginMember.getEmail());
 			writeForm.setBnickname(loginMember.getNickname());
-			
 		}
-		model.addAttribute("writeForm", writeForm); //새글을 생성 
-			
+		
+		model.addAttribute("writeForm",writeForm);
 		return "bbs/writeForm";
 	}
-
-	//게시글 처리
+	
+	//원글 작성 처리
 	@PostMapping("/")
-	public String write(@Valid @ModelAttribute WriteForm writeForm,
+	public String write(
+			@Valid @ModelAttribute WriteForm writeForm,
 			BindingResult bindingResult,
-			RedirectAttributes redirectAttributes) {
-		if(bindingResult.hasErrors()) { //글 오류나면 다시 작성폼으로 이동
+			RedirectAttributes redirectAttributes) throws IllegalStateException, IOException {
+	
+		if(bindingResult.hasErrors()) {
 			return "bbs/writeForm";
 		}
-		BoardDTO boardDTO = new BoardDTO();		
+		
+		BoardDTO boardDTO = new BoardDTO();
 		BeanUtils.copyProperties(writeForm, boardDTO);
+		
+		//첨부파일 파일시스템에 저장후 메타정보 추출
+		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(writeForm.getFiles());
+		//UploadFileDTO 변환
+		boardDTO.setFiles(convert(storedFiles));
+		
 		Long bnum = boardSVC.write(boardDTO);
 		
-		redirectAttributes.addAttribute("bnum",bnum);
-		
+		redirectAttributes.addAttribute("bnum", bnum);
 		return "redirect:/bbs/{bnum}";
 	}
 	
-	//답글 작성
+	private UpLoadFileDTO convert(MetaOfUploadFile attatchFile) {
+		UpLoadFileDTO uploadFileDTO = new UpLoadFileDTO();
+		BeanUtils.copyProperties(attatchFile, uploadFileDTO);
+		return uploadFileDTO;
+	}
+	
+	private List<UpLoadFileDTO> convert(List<MetaOfUploadFile> uploadFiles) {
+		List<UpLoadFileDTO> list = new ArrayList<>();
+	
+		for(MetaOfUploadFile file : uploadFiles) {
+			UpLoadFileDTO uploadFIleDTO = convert(file);
+			list.add( uploadFIleDTO );
+		}		
+		return list;
+	}
+	
+	//답글 작성 양식
 	@GetMapping("/reply")
 	public String replyForm(Model model) {
 		model.addAttribute("replyForm", new ReplyForm());
 		return "bbs/replyForm";
 	}
-
-	//답글 처리
+	
+	//답글 작성 처리
 	@PostMapping("/reply")
-	public String reply(@ModelAttribute ReplyForm replyForm,
+	public String reply(
+			@Valid @ModelAttribute ReplyForm replyForm,
 			BindingResult bindingResult) {
-		if(bindingResult.hasErrors()) { //글 오류나면 다시 작성폼으로 이동
+	
+		if(bindingResult.hasErrors()) {
 			return "bbs/replyForm";
 		}
+		
 		return "redirect:/bbs/list";
-	}
+	}	
 	
 	//게시글 상세
 	@GetMapping("/{bnum}")
-	public String  detailItem(
+	public String detailItem(
 			@PathVariable Long bnum,
 			Model model) {
+		
 		model.addAttribute("detailItem", boardSVC.itemDetail(bnum));
 		
-		return "bbs/detialItem";
+		return "bbs/detailItem";
 	}
+	
+	//게시글 목록
+	@GetMapping("/list")
+	public String list(Model model) {
+		
+		List<BoardDTO> list = boardSVC.list();
+		
+		model.addAttribute("list", list);
+		
+		return "bbs/list";
+	}	
 	
 	//게시글 수정 양식
 	@GetMapping("/{bnum}/edit")
-	public String editForm(@PathVariable Long bnum,
-			Model model){
-		model.addAttribute("item", boardSVC.itemDetail(bnum)); //값을 받아옴 
+	public String editForm(
+			@PathVariable Long bnum,
+			Model model) {
+		
+		model.addAttribute("item", boardSVC.itemDetail(bnum)) ;
 		return "bbs/editForm";
 	}
 	
-	//게시글 수정  처리
+	//게시글 수정 처리
 	@PatchMapping("/{bnum}/edit")
 	public String edit(
-			@PathVariable Long bnum, 
+			@PathVariable Long bnum,
 			@Valid @ModelAttribute EditForm editForm,
 			BindingResult bindingResult) {
+		
 		if(bindingResult.hasErrors()) {
-			return "bbs/editForm";	
+			return "bbs/editForm";
 		}
+		
 		return "redirect:/bbs/{bnum}";
 	}
 	
 	//게시글 삭제
 	@DeleteMapping("/{bnum}")
 	@ResponseBody
-	public JsonResult<String> delItem(@PathVariable long bnum) {
-//		JsonResult<String> result = null;
+	public JsonResult<String> delItem(@PathVariable Long bnum) {
+
 		boardSVC.delItem(bnum);
 		return new JsonResult<String>("00", "ok", String.valueOf(bnum));
-		 
 	}
+	
 }

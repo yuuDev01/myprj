@@ -47,4 +47,10 @@ public interface BoardDAO {
 	 */
 	void delItem(Long bnum);
 	
+	/**
+	 * 조회수 증가
+	 * @param bnum
+	 */
+	void updateBhit(Long bnum);
+	
 }

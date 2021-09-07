@@ -30,7 +30,6 @@
   </style>  
   <script src="/js/common/ajaxCall.js" defer></script>
   <script src="/js/bbs/detailItem.js" defer></script>
- 
 </head>
 <body>
   <div class="global-wrap">
@@ -47,72 +46,80 @@
     <div class="main">
       <div class="inner main-inner">
       	<main>
-					 <div class="wrap">
-					 <form action="" class="row gx-3 gy-2 align-items-center" th:method="post"
-					    	id="writeForm" th:object="${detailItem}">					      <input type="hidden" th:field="*{bemail}" />
-					      <input type="hidden" th:field="*{bnickname}" />
+					 <div class="wrap" th:with="email=${session?.loginMember?.email}">
+					    <form action="" class="row gx-3 gy-2 align-items-center" th:method="post"
+					    	id="writeForm" th:object="${detailItem}">
+					    	<input type="hidden" th:field="*{bemail}"/>
+					    	<input type="hidden" th:field="*{bnickname}"/>
 					      <p class="fs-3 text-center">게시글 보기</p>
-					       <div class="row mb-3" th:errors="*{global}" th:errorclass="field-msg">
-					        <label for="category" class="col-sm-2 col-form-label text-center"></label>
-					        <div class="col-sm-10" th:each="err:${#fields.globalErrors()}" th:text="${err}">
-					        글로벌오류
-					        </div>
-					       </div> 
+					      <div class="row mb-3" th:errors="*{global}" th:errorclass="field-msg">
+					      	<label class="col-sm-2 col-form-label text-center"></label>
+					      	<div class="col-sm-10" th:each="err:${#fields.globalErrors()}"
+					      												 th:text="${err}">
+					      		글로벌 오류
+					      	</div>
+					      </div>
 					      <div class="row mb-3">
 					        <label for="category" class="col-sm-2 col-form-label text-center">분류</label>
 					        <div class="col-sm-10">
-					          <select class="form-select" id="category" th:field="*{bcategory}" disabled="disabled" >
-					            <option value="" selected >===선택===</option>
-					            <option th:each="item : ${category}" th:value="${item.code}" th:text="${item.decode}">One</option>
-					          </select> 
-					          <div th:errors="*{bcategory}" th:errorclass="field-msg" ></div>
+					          <select class="form-select" id="category" th:field="*{bcategory}" disabled="disabled">
+					            <option value="" selected > == 선택 == </option>
+					            <option th:each="item : ${category}"
+					            				th:value="${item.code}" th:text="${item.decode}">One</option>
+					          </select>
+					      		<div th:errors="*{bcategory}" th:errorclass="field-msg"></div>
 					        </div>
 					      </div>
 					      <div class="row mb-3">
 					        <label for="title" class="col-sm-2 col-form-label text-center">제목</label>
 					        <div class="col-sm-10">
 					          <input type="text" class="form-control" id="title" th:field="*{btitle}" readonly="readonly">
+					          <div th:errors="*{btitle}" th:errorclass="field-msg"></div>
 					        </div>
-				          <div th:errors="*{btitle}" th:errorclass="field-msg" ></div>
 					      </div>
 					      <div class="row mb-3">
 					        <label for="nickname" class="col-sm-2 col-form-label text-center">작성자</label>
 					        <div class="col-sm-10">
-					         <p th:text="|*{bnickname}(*{bemail})|"></p>
-	<!-- 	          <input type="text" class="form-control" id="nickname" th:field="*{bnickname}" readonly="readonly">
-					          <div th:errors="*{bnickname}" th:errorclass="field-msg"></div> -->		
+					        	<p th:text="|*{bnickname}(*{bemail})|"></p>
 					        </div>
 					      </div>
 					      <div class="row mb-3">
 					        <label for="content" class="col-sm-2 col-form-label text-center">내용</label>
 					        <div class="col-sm-10">
-					          <textarea rows="10" class="form-control" id="content" th:field="*{bcontent}"  readonly="readonly"></textarea>
+					          <textarea rows="10" class="form-control" id="content" th:field="*{bcontent}" readonly="readonly"></textarea>
+					          <div th:errors="*{bcontent}" th:errorclass="field-msg"></div>
 					        </div>
-	 			          <div th:errors="*{bcontent}" th:errorclass="field-msg" ></div>			        
 					      </div>
-					      <div class="row mb-3">
+					      <div class="row mb-3" >
 					        <label for="file" class="col-sm-2 col-form-label text-center">첨부</label>
-					        <div class="col-sm-10">
-					          <input type="file" class="form-control" id="file">
+					        <div class="col-sm-10" >
+					        	<p th:each="file : *{files}">
+					          	<a th:href="@{|/attach/${file.store_fname}/${file.upload_fname}}|"
+					          	 th:text="${file.upload_fname}"></a>
+					          </p>
 					        </div>
 					      </div>
 					      <div class="row mb-3">
 					        <div class="col-sm-12 text-sm-end">
-					          <button type="submit" class="btn btn-primary" id="mdoifyBtn" th:data-bnum="*{bnum}">수정</button>
-					          <button type="reset" class="btn btn-primary" id="cancelBtn" th:data-bnum="*{bnum}">삭제</button>
+					        	<!-- 본인글에 대해서 수정,삭제버튼 노출 -->
+					       		<th:block th:if="${email} == *{bemail}">
+					 <!--       		<th:block th:if="${#strings.equals(email,detailItem.bemail)}"> -->
+					          	<button type="button" class="btn btn-primary" id="modifyBtn" th:data-bnum="*{bnum}">수정</button>
+					          	<button type="button" class="btn btn-primary" id="delBtn"  th:data-bnum="*{bnum}">삭제</button>
+					          </th:block>
 					          <button type="button" class="btn btn-primary" id="listBtn">목록</button>
 					        </div>
 					      </div>
 					    </form>
 					  </div>      	
       	</main>
-			</div>
-		</div>
-		<div class="foot">
-			<div class="inner foot-inner">
-				<footer>푸터</footer>
-			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="inner foot-inner">
+        <footer>푸터</footer>
+      </div>
+    </div>    
+  </div>
 </body>
 </html>
