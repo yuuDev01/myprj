@@ -110,7 +110,7 @@ public class BoardDAOImpl implements BoardDAO {
 			sql.append("  0, "); //조회수
 			sql.append("  ?, ");
 			sql.append("  ?, "); //부모글
-			sql.append("  BOARD_BNUM_SEQ.currval, "); //답글그룹
+			sql.append("  ?, "); //답글그룹
 			sql.append("  ?, "); //답글순서
 			sql.append("  ? ");  //답글들여쓰기
 			sql.append(") ");
@@ -132,8 +132,9 @@ public class BoardDAOImpl implements BoardDAO {
 					pstmt.setString(5, boardDTO.getBnickname());
 					pstmt.setString(6, boardDTO.getBcontent());
 					pstmt.setLong(7, boardDTO.getPbnum());
-					pstmt.setLong(8, boardDTO.getBstep() + 1);
-					pstmt.setLong(9, boardDTO.getBindent() + 1);
+					pstmt.setLong(8, boardDTO.getBgroup());
+					pstmt.setLong(9, boardDTO.getBstep() + 1);
+					pstmt.setLong(10, boardDTO.getBindent() + 1);
 						
 					return pstmt;
 				}
@@ -206,6 +207,35 @@ public class BoardDAOImpl implements BoardDAO {
 			
 			return list;
 		}
+		@Override
+		public List<BoardDTO> list(int startRec, int endRec) {
+			StringBuffer sql = new StringBuffer();
+			sql.append("select *");
+			sql.append(" from ( select row_number() over (order by bgroup desc, bstep asc) as num,");
+			sql.append("       bnum,  ");
+			sql.append("       bcategory,  ");
+			sql.append("       btitle,  ");
+			sql.append("       bnickname,  ");
+			sql.append("       bid, ");
+			sql.append("       bemail,  ");
+			sql.append("       bhit, ");
+			sql.append("       pbnum, ");
+			sql.append("       bgroup, ");
+			sql.append("       bstep, ");
+			sql.append("       bindent, ");
+			sql.append("       status, ");
+			sql.append("       bcdate, ");
+			sql.append("       budate ");
+			sql.append(" from board) t1");
+			sql.append(" where num between ? and ? ");
+			
+			List<BoardDTO> list = jt.query(
+					sql.toString(), 
+					new BeanPropertyRowMapper<>(BoardDTO.class),startRec,endRec
+					);	
+			
+			return list;
+		}
 
 		//게시글 상세
 		@Override
@@ -252,13 +282,22 @@ public class BoardDAOImpl implements BoardDAO {
 		//조회수 증가
 		@Override
 		public void updateBhit(Long bnum) {
-		// TODO Auto-generated method stub
 			StringBuffer sql = new StringBuffer();
 			sql.append("update board ");
-			sql.append(" set bhit = bhit +1 ");
-			sql.append(" where bnum  = ? ");
+			sql.append("	 set bhit = bhit + 1 ");
+			sql.append(" where bnum = ? ");
 			
 			jt.update(sql.toString(), bnum);
 			
+		}
+		
+		//게시판 전체 레코드 수
+		@Override
+		public long totalRecordCount() {
+		// TODO Auto-generated method stub
+			StringBuffer sql = new StringBuffer();
+			sql.append("select count(*) from board ");
+			long totalCount = jt.queryForObject(sql.toString(), Long.class);
+			return totalCount;
 		}
 	}

@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.myprj.domain.member.dto.MemberDTO;
 import com.example.myprj.domain.member.svc.MemberSVC;
@@ -42,11 +43,13 @@ private final MemberSVC memberSVC;
 		return "loginForm";
 	}
 	
+	//requestPara 쿼리스트링 읽음
 	//로그인 처리
 	@PostMapping("/login")
 	public String login(
 			@Valid @ModelAttribute LoginForm loginForm, 
 			BindingResult bindingResult,
+			@RequestParam(name="redirectUrl", defaultValue = "/") String redirectUrl,
 			Model model, HttpServletRequest request) {
 		
 		log.info("LoginForm:{}",loginForm);
@@ -79,8 +82,8 @@ private final MemberSVC memberSVC;
 		LoginMember loginMember = new LoginMember(
 			memberDTO.getId(),	memberDTO.getEmail(), memberDTO.getNickname(), "회원");		
 		session.setAttribute("loginMember", loginMember );
-		
-		return "redirect:/";
+		log.info("redirectUrl:{}={}",redirectUrl,"redirect:"+redirectUrl);
+		return "redirect:"+redirectUrl;
 	}
 	
 	//로그아웃

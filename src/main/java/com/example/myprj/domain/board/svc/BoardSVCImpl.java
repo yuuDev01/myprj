@@ -50,6 +50,11 @@ public class BoardSVCImpl implements BoardSVC{
 	@Override
 	public Long reply(BoardDTO boardDTO) {
 		Long bnum = boardDAO.reply(boardDTO);
+		
+		//첨부파일 메타정보 저장
+		upLoadFileDAO.addFiles(
+				convert(bnum, boardDTO.getBcategory(), boardDTO.getFiles())
+		);		
 		return bnum;
 	}
 
@@ -60,18 +65,26 @@ public class BoardSVCImpl implements BoardSVC{
 		return list;
 	}
 
+	@Override
+	public List<BoardDTO> list(int startRec, int endRec) {
+		// TODO Auto-generated method stub
+		List<BoardDTO> list = boardDAO.list(startRec, endRec);
+		return list;
+	}
+	
 	//게시글 상세
 	@Override
 	public BoardDTO itemDetail(Long bnum) {
+		//게시글 가져오기
 		BoardDTO boardDTO = boardDAO.itemDetail(bnum);
 		
+		//첨부파일 가져오기
 		boardDTO.setFiles(
 				upLoadFileDAO.getFiles(
 						String.valueOf(boardDTO.getBnum()), boardDTO.getBcategory()));
-		//조회수 증가
+		
+		//조회수증가
 		boardDAO.updateBhit(bnum);
-//		boardDTO.setBhit(boardDAO.itemDetail(bnum).getBhit());
-
 		return boardDTO;
 	}
 
@@ -79,6 +92,10 @@ public class BoardSVCImpl implements BoardSVC{
 	@Override
 	public Long modifyItem(Long bnum, BoardDTO boardDTO) {
 		Long modifiedBnum = boardDAO.modifyItem(bnum, boardDTO);
+		//첨부파일 메타정보 저장
+		upLoadFileDAO.addFiles(
+				convert(bnum, boardDTO.getBcategory(), boardDTO.getFiles())
+		);
 		return modifiedBnum;
 	}
 
@@ -90,6 +107,13 @@ public class BoardSVCImpl implements BoardSVC{
 		//서버파일 시스템에 있는 업로드 파일삭제
 		fileStore.deleteFiles(upLoadFileDAO.getStore_Fname(String.valueOf(bnum)));
 		//업로드 파일 메타정보 삭제
-		upLoadFileDAO.deleteFileByRid(String.valueOf(bnum));	
+		upLoadFileDAO.deleteFileByRid(String.valueOf(bnum));		
+	}
+	
+	//게시판 전체 레코드수
+	@Override
+	public long totalRecordCount() {
+		// TODO Auto-generated method stub
+		return boardDAO.totalRecordCount();
 	}
 }

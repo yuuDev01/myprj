@@ -20,14 +20,15 @@ public interface UpLoadFileDAO {
 	 */
 	List<UpLoadFileDTO> getFiles(String rid);
 	List<UpLoadFileDTO> getFiles(String rid,String code);
+	UpLoadFileDTO getFileByFid(String fid);
+	UpLoadFileDTO getFileBySfname(String sfname);
 	
 	/**
-	 * 업로드파일 삭제 by 상품
+	 * 업로드파일 삭제 by rid
 	 * @param pid
 	 */
 	void deleteFileByRid(String rid);
 	void deleteFileByRid(String rid,String code);
-	
 	
 	/**
 	 * 참조번호로 첨부파일 가져오기
@@ -36,9 +37,15 @@ public interface UpLoadFileDAO {
 	 */
 	List<String> getStore_Fname(String rid);
 	
-//	/**
-//	 * 업로드파일 삭제 by FID
-//	 * @param fid
-//	 */
-//	void deleteFileByFid(String fid);
+	/**
+	 * 업로드파일 삭제 by FID
+	 * @param fid
+	 */
+	void deleteFileByFid(String fid);
+	
+	/**
+	 * 업로드파일 삭제 by FID
+	 * @param fid
+	 */
+	void deleteFileBySfname(String sfname);
 }

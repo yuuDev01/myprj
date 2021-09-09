@@ -58,6 +58,7 @@ public class BoardDAOImplTest {
 	
 	@Test
 	@DisplayName("게시글 수정 wrong bnum 예외처리")
+	@Disabled
 	void modifyItemThrow() {
 		Long bnum = 10L;		
 		
@@ -70,5 +71,24 @@ public class BoardDAOImplTest {
 				InvalidDataAccessApiUsageException.class, 
 				()->boardDAOImpl.modifyItem(bnum, boardDTO)
 		);
+	}
+	
+	@Test
+	@DisplayName("원글 생성")
+	@Disabled
+	void write300() {
+		for(int i= 0 ; i<300; i++) {
+			BoardDTO boardDTO = new BoardDTO();
+			boardDTO.setBcategory("A0502");
+			boardDTO.setBtitle("제목:"+(i+1));
+			boardDTO.setBid(21L);
+			boardDTO.setBemail("test1@test.com");
+			boardDTO.setBnickname("gggg");
+			boardDTO.setBcontent("내용 :"+(i+1));
+			
+			Long bnum = boardDAOImpl.write(boardDTO);
+			log.info("원글생성 bnum:{}",bnum);
+		}
+
 	}
 }

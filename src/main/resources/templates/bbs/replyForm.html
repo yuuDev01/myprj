@@ -16,7 +16,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>게시글 보기</title>
+  <title>게시글 답글 작성</title>
   
   <link rel="stylesheet" href="/css/xxx.css" />
   <style>
@@ -28,8 +28,8 @@
       letter-spacing: 0.5em;
     }
   </style>  
-  <script src="/js/common/ajaxCall.js" defer></script>
-  <script src="/js/bbs/detailItem.js" defer></script>
+  <script src="/js/bbs/replyForm.js" defer></script>
+  
 </head>
 <body>
   <div class="global-wrap">
@@ -46,12 +46,13 @@
     <div class="main">
       <div class="inner main-inner">
       	<main>
-					 <div class="wrap" th:with="email=${session?.loginMember?.email}">
+					 <div class="wrap">
 					    <form action="" class="row gx-3 gy-2 align-items-center" th:method="post"
-					    	id="writeForm" th:object="${detailItem}">
+					    	id="writeForm" th:object="${replyForm}" enctype="multipart/form-data">
+					    	<input type="hidden" th:field="*{bid}"/>
 					    	<input type="hidden" th:field="*{bemail}"/>
 					    	<input type="hidden" th:field="*{bnickname}"/>
-					      <p class="fs-3 text-center">게시글 보기</p>
+					      <p class="fs-3 text-center">답글 작성</p>
 					      <div class="row mb-3" th:errors="*{global}" th:errorclass="field-msg">
 					      	<label class="col-sm-2 col-form-label text-center"></label>
 					      	<div class="col-sm-10" th:each="err:${#fields.globalErrors()}"
@@ -62,7 +63,7 @@
 					      <div class="row mb-3">
 					        <label for="category" class="col-sm-2 col-form-label text-center">분류</label>
 					        <div class="col-sm-10">
-					          <select class="form-select" id="category" th:field="*{bcategory}" disabled="disabled">
+					          <select class="form-select" id="category" th:field="*{bcategory}" dis>
 					            <option value="" selected > == 선택 == </option>
 					            <option th:each="item : ${category}"
 					            				th:value="${item.code}" th:text="${item.decode}">One</option>
@@ -73,7 +74,7 @@
 					      <div class="row mb-3">
 					        <label for="title" class="col-sm-2 col-form-label text-center">제목</label>
 					        <div class="col-sm-10">
-					          <input type="text" class="form-control" id="title" th:field="*{btitle}" readonly="readonly">
+					          <input type="text" class="form-control" id="title" th:field="*{btitle}">
 					          <div th:errors="*{btitle}" th:errorclass="field-msg"></div>
 					        </div>
 					      </div>
@@ -81,33 +82,28 @@
 					        <label for="nickname" class="col-sm-2 col-form-label text-center">작성자</label>
 					        <div class="col-sm-10">
 					        	<p th:text="|*{bnickname}(*{bemail})|"></p>
+<!-- 					          <input type="text" class="form-control" id="nickname" 
+					          			 th:field="*{bnickname}" readonly="readonly">
+					        	<div th:errors="*{bnickname}" th:errorclass="field-msg"></div> -->
 					        </div>
 					      </div>
 					      <div class="row mb-3">
 					        <label for="content" class="col-sm-2 col-form-label text-center">내용</label>
 					        <div class="col-sm-10">
-					          <textarea rows="10" class="form-control" id="content" th:field="*{bcontent}" readonly="readonly"></textarea>
+					          <textarea rows="10" class="form-control" id="content" th:field="*{bcontent}"></textarea>
 					          <div th:errors="*{bcontent}" th:errorclass="field-msg"></div>
 					        </div>
 					      </div>
-					      <div class="row mb-3" >
+					      <div class="row mb-3">
 					        <label for="file" class="col-sm-2 col-form-label text-center">첨부</label>
-					        <div class="col-sm-10" >
-					        	<p th:each="file : *{files}">
-					          	<a th:href="@{|/attach/${file.store_fname}/${file.upload_fname}}|"
-					          	 th:text="${file.upload_fname}"></a>
-					          </p>
+					        <div class="col-sm-10">
+					          <input type="file" class="form-control" id="files" th:field="*{files}" multiple="multiple">
 					        </div>
 					      </div>
 					      <div class="row mb-3">
 					        <div class="col-sm-12 text-sm-end">
-					        	<button type="button" class="btn btn-primary" id="replyBtn" th:data-bnum="*{bnum}">답글</button>
-					        	<!-- 본인글에 대해서 수정,삭제버튼 노출 -->
-					       		<th:block th:if="${email} == *{bemail}">
-					 <!--       		<th:block th:if="${#strings.equals(email,detailItem.bemail)}"> -->
-					          	<button type="button" class="btn btn-primary" id="modifyBtn" th:data-bnum="*{bnum}">수정</button>
-					          	<button type="button" class="btn btn-primary" id="delBtn"  th:data-bnum="*{bnum}">삭제</button>
-					          </th:block>
+					          <button type="button" class="btn btn-primary" id="writeBtn" th:data-bnum="*{pbnum}">등록</button>
+					          <button type="reset" class="btn btn-primary" id="cancelBtn">취소</button>
 					          <button type="button" class="btn btn-primary" id="listBtn">목록</button>
 					        </div>
 					      </div>
