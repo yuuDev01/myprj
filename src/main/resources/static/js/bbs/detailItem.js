@@ -4,10 +4,11 @@ const $modifyBtn 	= document.getElementById('modifyBtn');
 const $delBtn 		= document.getElementById('delBtn');  		
 const $listBtn 		= document.getElementById('listBtn');
 
-const handler = e => {
+const handler = (res, e) => {
 	//console.log(e);
-	if(e.rtcd == '00'){
-		location.href = "/bbs/list";
+	if(res.rtcd == '00'){
+		const cate = e.target.dataset.cate;
+		location.href = `/bbs/list?cate=${cate}`;
 	}else{
 		//alert('삭제오류!');
 		return false;
@@ -33,7 +34,7 @@ $delBtn?.addEventListener("click", e=>{
 	if(confirm('삭제하시겠습니까?')){
 		request.delete(url)
 					 .then(res=>res.json())
-					 .then(res=>handler(res))
+					 .then(res=>handler(res, e))
 					 .catch(err=>console.log(err));					 
 	}	
 	
@@ -41,5 +42,6 @@ $delBtn?.addEventListener("click", e=>{
 
 //목록
 $listBtn?.addEventListener("click", e=>{
-	location.href = "/bbs/list";
+	const cate = e.target.dataset.cate;
+	location.href = `/bbs/list?cate=${cate}`;
 });

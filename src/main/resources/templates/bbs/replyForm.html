@@ -52,6 +52,7 @@
 					    	<input type="hidden" th:field="*{bid}"/>
 					    	<input type="hidden" th:field="*{bemail}"/>
 					    	<input type="hidden" th:field="*{bnickname}"/>
+					    	<input type="hidden" th:field="*{bcategory}"/>
 					      <p class="fs-3 text-center">답글 작성</p>
 					      <div class="row mb-3" th:errors="*{global}" th:errorclass="field-msg">
 					      	<label class="col-sm-2 col-form-label text-center"></label>
@@ -63,7 +64,7 @@
 					      <div class="row mb-3">
 					        <label for="category" class="col-sm-2 col-form-label text-center">분류</label>
 					        <div class="col-sm-10">
-					          <select class="form-select" id="category" th:field="*{bcategory}" dis>
+					          <select class="form-select" id="category" th:field="*{bcategory}" disabled="disabled">
 					            <option value="" selected > == 선택 == </option>
 					            <option th:each="item : ${category}"
 					            				th:value="${item.code}" th:text="${item.decode}">One</option>
@@ -104,7 +105,7 @@
 					        <div class="col-sm-12 text-sm-end">
 					          <button type="button" class="btn btn-primary" id="writeBtn" th:data-bnum="*{pbnum}">등록</button>
 					          <button type="reset" class="btn btn-primary" id="cancelBtn">취소</button>
-					          <button type="button" class="btn btn-primary" id="listBtn">목록</button>
+					          <button type="button" class="btn btn-primary" id="listBtn" th:data-cate="*{bcategory}">목록</button>
 					        </div>
 					      </div>
 					    </form>

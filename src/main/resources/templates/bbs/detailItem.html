@@ -106,9 +106,9 @@
 					       		<th:block th:if="${email} == *{bemail}">
 					 <!--       		<th:block th:if="${#strings.equals(email,detailItem.bemail)}"> -->
 					          	<button type="button" class="btn btn-primary" id="modifyBtn" th:data-bnum="*{bnum}">수정</button>
-					          	<button type="button" class="btn btn-primary" id="delBtn"  th:data-bnum="*{bnum}">삭제</button>
+					          	<button type="button" class="btn btn-primary" id="delBtn"  th:data-bnum="*{bnum}" th:data-cate="*{bcategory}">삭제</button>
 					          </th:block>
-					          <button type="button" class="btn btn-primary" id="listBtn">목록</button>
+					          <button type="button" class="btn btn-primary" id="listBtn" th:data-cate="*{bcategory}">목록</button>
 					        </div>
 					      </div>
 					    </form>

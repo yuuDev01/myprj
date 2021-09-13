@@ -53,7 +53,7 @@
 
   </style>   
   
-  <script src="/js/bbs/list.js" defer></script>
+  <script src="/js/bbs/all.js" defer></script>
 </head>
 <body>
   <div class="global-wrap">
@@ -86,13 +86,13 @@
 							</div> -->
 				      <table class="table table-sm table-hover table-bordered caption-top">
 				        <caption class="bbs-title">
-				        	<h3 th:each="bbs : ${category}"
-							    	  th:if="${bbs.code == cate}"
-							    		th:text="${bbs.decode}">게시글 목록</h3>
+				        	<h3>전체 게시글 목록</h3>	
+							    					    		
 				        </caption>
 				        <thead>
 				          <tr class="table-secondary">
 				            <th scope="col">번호</th>
+				            <th scope="cal">분류</th>
 				            <th scope="col">제목</th>
 				            <th scope="col">작성자</th>
 				            <th scope="col">작성일</th>
@@ -102,6 +102,10 @@
 				        <tbody>
 				          <tr th:each="item : ${list}">
 				            <th scope="row" th:text="${item.bnum}">1</th>
+				            <th scope="row"
+				            	  th:each="bbs : ${category}"
+				            	  th:if="${bbs.code == item.bcategory}" 
+				            		th:text="${bbs.decode}">분류</th>
 				            <td class="w-50">
 				            	<th:block th:if="${item.bindent} > 0">
 				            		<span th:each="cnt : ${#numbers.sequence(1,item.bindent)}">&nbsp;&nbsp;</span>
@@ -115,18 +119,18 @@
 				          </tr>
 				        </tbody>
 				      </table>
-				      <div class="wrap-bbs-btns">
+<!-- 				      <div class="wrap-bbs-btns">
 				        <button type="button" id="writeBtn" class="btn btn-sm btn-primary" th:data-cate="${cate}">글작성</button>
-				      </div>
+				      </div> -->
 				      <!-- 페이징 -->
 							<div class="wrap-bbs-paging">
 							  <ul class="pagination pagination-sm justify-content-center">
 							  	<th:block th:if="${fc.prev}">
 								  	<li class="page-item">
-									    	<a class="page-link" href="#" th:href="@{/bbs/list/1/{searchType}/{keyword}(searchType=${fc.searchType},keyword=${fc.keyword},cate=${cate})}"><i class="fas fa-angle-double-left"></i></a>
+									    	<a class="page-link" href="#" th:href="@{/bbs/all/1/{searchType}/{keyword}(searchType=${fc.searchType},keyword=${fc.keyword})}"><i class="fas fa-angle-double-left"></i></a>
 									  </li>
 								  	<li class="page-item">
-									    	<a class="page-link" href="#" th:href="@{/bbs/list/{reqPage}/{searchType}/{keyword}(reqPage=${fc.startPage-1},searchType=${fc.searchType},keyword=${fc.keyword},cate=${cate})}"><i class="fas fa-angle-left"></i></a>
+									    	<a class="page-link" href="#" th:href="@{/bbs/all/{reqPage}/{searchType}/{keyword}(reqPage=${fc.startPage-1},searchType=${fc.searchType},keyword=${fc.keyword})}"><i class="fas fa-angle-left"></i></a>
 									  </li>
 								  </th:block>
 							    <th:block th:each="pnum : ${#numbers.sequence(fc.startPage,fc.endPage)}">
@@ -137,17 +141,17 @@
 								    </li>							    
 								    <li class="page-item" 
 								    		th:if="${fc.rc.reqPage != pnum}">
-								    	<a class="page-link" href="#" th:href="@{/bbs/list/{reqPage}/{searchType}/{keyword}(reqPage=${pnum},searchType=${fc.searchType},keyword=${fc.keyword},cate=${cate})}" th:text="${pnum}">3</a>
+								    	<a class="page-link" href="#" th:href="@{/bbs/all/{reqPage}/{searchType}/{keyword}(reqPage=${pnum},searchType=${fc.searchType},keyword=${fc.keyword})}" th:text="${pnum}">3</a>
 								    </li>
 								    </th:block>
 							    </th:block>
 							    <th:block th:if="${fc.next}">
 								  	<li class="page-item">
-									    	<a class="page-link" href="#" th:href="@{/bbs/list/{reqPage}/{searchType}/{keyword}(reqPage=${fc.endPage+1},searchType=${fc.searchType},keyword=${fc.keyword},cate=${cate})}"><i class="fas fa-angle-right"></i></a>
+									    	<a class="page-link" href="#" th:href="@{/bbs/all/{reqPage}/{searchType}/{keyword}(reqPage=${fc.endPage+1},searchType=${fc.searchType},keyword=${fc.keyword})}"><i class="fas fa-angle-right"></i></a>
 									  </li>
 								  	<li class="page-item">
 									    	<a class="page-link" href="#" 
-									    		th:href="@{/bbs/list/{reqPage}/{searchType}/{keyword}(reqPage=${fc.finalEndPage},searchType=${fc.searchType},keyword=${fc.keyword},cate=${cate})}">
+									    		th:href="@{/bbs/all/{reqPage}/{searchType}/{keyword}(reqPage=${fc.finalEndPage},searchType=${fc.searchType},keyword=${fc.keyword})}">
 									    		<i class="fas fa-angle-double-right"></i>
 									    	</a>
 									  </li>		

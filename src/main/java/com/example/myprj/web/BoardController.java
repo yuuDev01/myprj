@@ -21,16 +21,19 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.myprj.domain.board.dto.BoardDTO;
+import com.example.myprj.domain.board.dto.SearchDTO;
 import com.example.myprj.domain.board.svc.BoardSVC;
 import com.example.myprj.domain.common.dao.CodeDAO;
 import com.example.myprj.domain.common.dto.MetaOfUploadFile;
 import com.example.myprj.domain.common.dto.UpLoadFileDTO;
 import com.example.myprj.domain.common.file.FileStore;
 import com.example.myprj.domain.common.mail.MailService;
+import com.example.myprj.domain.common.paging.FindCriteria;
 import com.example.myprj.domain.common.paging.PageCriteria;
 import com.example.myprj.domain.common.paging.RecordCriteria;
 import com.example.myprj.domain.member.svc.MemberSVC;
@@ -56,9 +59,8 @@ public class BoardController {
 	private final CodeDAO codeDAO;
 	private final FileStore fileStore;
 	@Autowired
-	@Qualifier("pc10")  //이름이 pc5인걸 가져다 쓰겠다
-	private final PageCriteria pc;
-//	private final RecordCriteria rc;
+	@Qualifier("fc10")
+	private FindCriteria fc;
 	
 	@ModelAttribute("category")
 	public List<Code> hobby(){
@@ -67,10 +69,11 @@ public class BoardController {
 		return list;
 	}
 	
-	
-	@GetMapping("/")
+	//원글 작성 양식
+	@GetMapping("")
 	public String writeForm(
 			//@ModelAttribute WriteForm wrtieForm
+			@RequestParam String cate,
 			Model model,
 			HttpServletRequest request
 			) {
@@ -85,6 +88,7 @@ public class BoardController {
 			writeForm.setBid(loginMember.getId());
 			writeForm.setBemail(loginMember.getEmail());
 			writeForm.setBnickname(loginMember.getNickname());
+			writeForm.setBcategory(cate);
 		}
 		
 		model.addAttribute("writeForm",writeForm);
@@ -92,8 +96,9 @@ public class BoardController {
 	}
 	
 	//원글 작성 처리
-	@PostMapping("/")
+	@PostMapping("")
 	public String write(
+			@RequestParam String cate,
 			@Valid @ModelAttribute WriteForm writeForm,
 			BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws IllegalStateException, IOException {
@@ -101,7 +106,7 @@ public class BoardController {
 		if(bindingResult.hasErrors()) {
 			return "bbs/writeForm";
 		}
-		
+		log.info("writeForm:{}",writeForm);
 		BoardDTO boardDTO = new BoardDTO();
 		BeanUtils.copyProperties(writeForm, boardDTO);
 		
@@ -207,38 +212,104 @@ public class BoardController {
 		return "bbs/detailItem";
 	}
 	
-	//게시글 목록
-	@GetMapping({"/list", "/list/{reqPage}"})
-	public String list(
+	//게시글 전체 목록
+	@GetMapping({"/all",
+							 "/all/{reqPage}",
+							 "/all/{reqPage}/{searchType}/{keyword}"})
+	public String all(
 			@PathVariable(required = false) Integer reqPage,
-			Model model) {
+			@PathVariable(required = false) String searchType,
+			@PathVariable(required = false) String keyword,			
+			Model model
+			) {
+		List<BoardDTO> list = null;
 		
-		//요청변수가 없으면 1
+		//요청페이지가 없으면 1페이지로
 		if(reqPage == null) reqPage = 1;
-		
 		//사용자가 요청한 페이지번호
-		pc.getRc().setReqPage(reqPage);
-		//게시판 전체레코드수
-		pc.setTotalRec(boardSVC.totalRecordCount());
-		//페이징 계산
-		pc.calculatePaging();
+		fc.getRc().setReqPage(reqPage);	
 		
-		List<BoardDTO> list = boardSVC.list(pc.getRc().getStartRec(),pc.getRc().getEndRec());
 		
+		//검색어 유무
+		if((searchType == null || searchType.equals(""))
+				&& (keyword == null || keyword.equals(""))) {
+			//게시판 전체레코드수
+			fc.setTotalRec(boardSVC.totoalRecordCount());
+			
+			list = boardSVC.list(
+					fc.getRc().getStartRec(),
+					fc.getRc().getEndRec());		
+		}else {
+			//게시판 전체레코드수
+			fc.setTotalRec(boardSVC.totoalRecordCount(searchType,keyword));
+			
+			list = boardSVC.list(
+					fc.getRc().getStartRec(),
+					fc.getRc().getEndRec(),						
+					searchType,keyword
+					);						
+		}
+		
+		fc.setSearchType(searchType);
+		fc.setKeyword(keyword);
+				
 		model.addAttribute("list", list);
-		model.addAttribute("pc", pc);
+		model.addAttribute("fc", fc);
+		
+		return "bbs/all";
+	}	
+	
+	
+	//게시글 카테고리별 목록
+	@GetMapping({"/list",
+							 "/list/{reqPage}",
+							 "/list/{reqPage}/{searchType}/{keyword}"})
+	public String list(
+			@RequestParam(required = false) String cate,
+			@PathVariable(required = false) Integer reqPage,
+			@PathVariable(required = false) String searchType,
+			@PathVariable(required = false) String keyword,			
+			Model model
+			) {
+		List<BoardDTO> list = null;
+		
+		//요청페이지가 없으면 1페이지로
+		if(reqPage == null) reqPage = 1;
+		//사용자가 요청한 페이지번호
+		fc.getRc().setReqPage(reqPage);	
+		
+		
+		//검색어 유무
+		if((searchType == null || searchType.equals(""))
+				&& (keyword == null || keyword.equals(""))) {
+			//게시판 전체레코드수
+			fc.setTotalRec(boardSVC.totoalRecordCount(cate));
+			
+			list = boardSVC.list(
+					cate,
+					fc.getRc().getStartRec(),
+					fc.getRc().getEndRec());		
+		}else {
+			//게시판 전체레코드수
+			fc.setTotalRec(boardSVC.totoalRecordCount(cate,searchType,keyword));
+			
+			list = boardSVC.list(
+					new SearchDTO(
+							cate, 
+							fc.getRc().getStartRec(), fc.getRc().getEndRec(), 
+							searchType, keyword)
+			);						
+		}
+		
+		fc.setSearchType(searchType);
+		fc.setKeyword(keyword);
+				
+		model.addAttribute("list", list);
+		model.addAttribute("fc", fc);
+		model.addAttribute("cate",cate);
 		
 		return "bbs/list";
 	}	
-//	@GetMapping("/list")
-//	public String list(Model model) {
-//		
-//		List<BoardDTO> list = boardSVC.list();
-//		
-//		model.addAttribute("list", list);
-//		
-//		return "bbs/list";
-//	}	
 	
 	//게시글 수정 양식
 	@GetMapping("/{bnum}/edit")
