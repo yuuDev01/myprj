@@ -12,7 +12,7 @@ const request = {
 			headers:{'content-Type' : 'application/json'},
 			body : JSON.stringify(payload)
 		})
-	},
+	},	
 	
 	patch(url,payload) {
 		return fetch(url, {
@@ -21,8 +21,22 @@ const request = {
 			body : JSON.stringify(payload)
 		})
 	},	
-	
+		
 	delete(url) {
 		return fetch(url, {method:'DELETE'});
-	}
+	},
+	
+	mpost(url,formData) { //multipart-formdata
+		return fetch(url, {
+			method: 'POST',
+			body : formData
+		})
+	},	
+		
+	mput(url,formData) { //multipart-formdata
+		return fetch(url, {
+			method: 'PUT',
+			body : formData
+		})
+	},		
 }

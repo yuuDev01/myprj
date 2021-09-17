@@ -24,23 +24,13 @@ public class APIBoardController {
 	private final FileStore fileStore;
 	
 	//게시글 삭제
-	@DeleteMapping("/{bnum}")
-	public JsonResult<String> delItem(@PathVariable Long bnum) {
+	@DeleteMapping("/{cate}/{bnum}")
+	public JsonResult<String> delItem(
+			@PathVariable String cate,
+			@PathVariable Long bnum) {
 
-		boardSVC.delItem(bnum);
+		boardSVC.delItem(cate,bnum);
 		return new JsonResult<String>("00", "ok", String.valueOf(bnum));
 	}
 	
-	//첨부파일 삭제 by fid
-	@DeleteMapping("/attach/{sfname}")
-	public JsonResult<String> delFile(@PathVariable String sfname){
-		
-		if(fileStore.deleteFile(sfname)) {
-			upLoadFileDAO.deleteFileBySfname(sfname);
-		}else {
-			return new JsonResult<String>("01","nok","파일삭제 실패!");
-		}
-		
-		return new JsonResult<String>("00","ok","파일삭제 성공");
-	}
 }

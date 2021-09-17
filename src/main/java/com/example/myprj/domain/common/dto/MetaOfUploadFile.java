@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 public class MetaOfUploadFile {
   private String store_fname; 	//서버관리를 위한 파일명(파일명 중복방지 UUID)
   private String upload_fname; 	//클라이언트가 업로드한 파일명
-  private String fsize;			//파일크기
-  private String ftype;			//파일유형		
+  private String fsize;					//파일크기
+  private String ftype;					//파일유형
 }

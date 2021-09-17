@@ -87,4 +87,11 @@ public interface MemberSVC {
 	 * @param postPw
 	 */
 	boolean changePw(String email, String prePw, String postPw);	
+	
+	/**
+	 * 별칭 변경
+	 * @param email
+	 * @param nickname
+	 */
+	boolean changeNickname(Long id, String nickname);
 }

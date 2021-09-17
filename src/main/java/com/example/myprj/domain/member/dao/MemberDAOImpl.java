@@ -274,8 +274,6 @@ public class MemberDAOImpl implements MemberDAO {
 		sql.append("   and tel = ? ");
 		sql.append("   and birth = ? ");
 		
-		log.info(sql.toString());
-		
 		String pw = 
 				jt.queryForObject(sql.toString(), String.class, email, tel, 
 						new SimpleDateFormat("yyyy-MM-dd").format(birth));
@@ -292,5 +290,16 @@ public class MemberDAOImpl implements MemberDAO {
 		sql.append("   and pw = ? ");   //이전 비밀번호
 		
 		return jt.update(sql.toString(), postPw, email, prePw);
+	}
+	
+	//별칭변경
+	@Override
+	public int changeNickname(Long id, String nickname) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("update member ");
+		sql.append("	 set nickname = ? ");   
+		sql.append(" where id = ? ");
+		
+		return jt.update(sql.toString(),nickname, id);		
 	}
 }

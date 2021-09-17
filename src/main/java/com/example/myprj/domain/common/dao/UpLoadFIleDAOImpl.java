@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,7 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class UpLoadFIleDAOImpl implements UpLoadFileDAO {
+public class UpLoadFileDAOImpl implements UpLoadFileDAO{
+	
 	private final JdbcTemplate jt;
 	
 	@Override
@@ -121,6 +123,27 @@ public class UpLoadFIleDAOImpl implements UpLoadFileDAO {
 							fid);
 	}
 
+	@Override
+	public UpLoadFileDTO getFileByRid(String rid) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select fid,rid,code,store_fname,upload_fname, ");
+		sql.append("       fsize,ftype,cdate,udate ");
+		sql.append("  from uploadfile  ");
+		sql.append(" where rid  = ? ");
+		
+		UpLoadFileDTO upLoadFileDTO = null;
+		try {
+			upLoadFileDTO = jt.queryForObject(
+					sql.toString(), 
+					new BeanPropertyRowMapper<>(UpLoadFileDTO.class),
+					rid);
+		} catch (EmptyResultDataAccessException e) {
+			//e.printStackTrace();
+		}
+		
+		return upLoadFileDTO;
+	}
+	
 	@Override
 	public UpLoadFileDTO getFileBySfname(String sfname) {
 		StringBuffer sql = new StringBuffer();

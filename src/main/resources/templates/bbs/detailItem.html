@@ -20,15 +20,16 @@
   
   <link rel="stylesheet" href="/css/xxx.css" />
   <style>
-    .wrap #writeForm {
-      width:600px;
+    .main .wrap .wrap-bbs{
+      width:90%;
       margin: 50px auto;
     }
-    .wrap #writeForm label{
+    .main .wrap #writeForm label{
       letter-spacing: 0.5em;
     }
   </style>  
   <script src="/js/common/ajaxCall.js" defer></script>
+  <script src="/js/common/ckeditor.js" defer></script>
   <script src="/js/bbs/detailItem.js" defer></script>
 </head>
 <body>
@@ -46,7 +47,8 @@
     <div class="main">
       <div class="inner main-inner">
       	<main>
-					 <div class="wrap" th:with="email=${session?.loginMember?.email}">
+					 <div class="wrap">
+					 	<div class="wrap-bbs"  th:with="email=${session?.loginMember?.email}">
 					    <form action="" class="row gx-3 gy-2 align-items-center" th:method="post"
 					    	id="writeForm" th:object="${detailItem}">
 					    	<input type="hidden" th:field="*{bemail}"/>
@@ -86,7 +88,7 @@
 					      <div class="row mb-3">
 					        <label for="content" class="col-sm-2 col-form-label text-center">내용</label>
 					        <div class="col-sm-10">
-					          <textarea rows="10" class="form-control" id="content" th:field="*{bcontent}" readonly="readonly"></textarea>
+					          <textarea rows="10" class="form-control" th:field="*{bcontent}" readonly="readonly"></textarea>
 					          <div th:errors="*{bcontent}" th:errorclass="field-msg"></div>
 					        </div>
 					      </div>
@@ -94,7 +96,7 @@
 					        <label for="file" class="col-sm-2 col-form-label text-center">첨부</label>
 					        <div class="col-sm-10" >
 					        	<p th:each="file : *{files}">
-					          	<a th:href="@{|/attach/${file.store_fname}/${file.upload_fname}}|"
+					          	<a th:href="@{|/attach/down/*{bcategory}/${file.store_fname}/${file.upload_fname}}|"
 					          	 th:text="${file.upload_fname}"></a>
 					          </p>
 					        </div>
@@ -106,13 +108,15 @@
 					       		<th:block th:if="${email} == *{bemail}">
 					 <!--       		<th:block th:if="${#strings.equals(email,detailItem.bemail)}"> -->
 					          	<button type="button" class="btn btn-primary" id="modifyBtn" th:data-bnum="*{bnum}">수정</button>
-					          	<button type="button" class="btn btn-primary" id="delBtn"  th:data-bnum="*{bnum}" th:data-cate="*{bcategory}">삭제</button>
+					          	<button type="button" class="btn btn-primary" th:data-bnum="*{bnum}" th:data-cate="*{bcategory}"
+					          		data-bs-toggle="modal" data-bs-target="#popUp" id="beforePopUpDelBtn">삭제</button>
 					          </th:block>
 					          <button type="button" class="btn btn-primary" id="listBtn" th:data-cate="*{bcategory}">목록</button>
 					        </div>
 					      </div>
 					    </form>
-					  </div>      	
+					    </div>
+					  </div>   				     	
       	</main>
       </div>
     </div>

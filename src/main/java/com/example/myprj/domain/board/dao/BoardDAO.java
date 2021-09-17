@@ -106,4 +106,5 @@ public interface BoardDAO {
 	 * @return
 	 */
 	long totoalRecordCount(String bcategory, String searchType, String keyword);
+	
 }

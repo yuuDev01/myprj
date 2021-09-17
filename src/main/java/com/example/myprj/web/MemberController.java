@@ -1,5 +1,6 @@
 package com.example.myprj.web;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,17 +19,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.myprj.domain.common.dao.CodeDAO;
+import com.example.myprj.domain.common.dao.UpLoadFileDAO;
+import com.example.myprj.domain.common.dto.UpLoadFileDTO;
+import com.example.myprj.domain.common.file.FileStore;
 import com.example.myprj.domain.member.dto.MemberDTO;
 import com.example.myprj.domain.member.svc.MemberSVC;
+import com.example.myprj.web.api.JsonResult;
 import com.example.myprj.web.form.Code;
 import com.example.myprj.web.form.LoginMember;
 import com.example.myprj.web.form.member.ChangePwForm;
 import com.example.myprj.web.form.member.EditForm;
 import com.example.myprj.web.form.member.JoinForm;
+import com.example.myprj.web.form.member.ProfileForm;
 
 import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import lombok.AllArgsConstructor;
@@ -42,6 +50,8 @@ public class MemberController {
 
 	private final MemberSVC memberSVC;
 	private final CodeDAO codeDAO;
+	private final FileStore fileStore;	
+	private final UpLoadFileDAO upLoadFileDAO;
 	
 	@ModelAttribute("hobby")
 	public List<Code> hobby(){
@@ -107,6 +117,7 @@ public class MemberController {
 		
 		return "redirect:/login";
 	}
+	
 	/**
 	 * 회원수정양식
 	 * @return
@@ -125,8 +136,10 @@ public class MemberController {
 		
 		//회원정보 가져오기
 		MemberDTO memberDTO =  memberSVC.findByEmail(loginMember.getEmail());
+		
 		EditForm editForm = new EditForm();
 		BeanUtils.copyProperties(memberDTO, editForm);
+		editForm.setSavedImgFile(memberDTO.getFile());
 		
 		if(memberDTO.getLetter().equals("1")) {
 			editForm.setLetter(true);
@@ -141,13 +154,16 @@ public class MemberController {
 	/**
 	 * 회원수정처리
 	 * @return
+	 * @throws IOException 
+	 * @throws IllegalStateException 
 	 */
 	@PatchMapping("/edit")
 	public String edit(
 			@Valid @ModelAttribute EditForm editForm,
 			BindingResult bindingResult,
-			HttpServletRequest request) {
-		log.info("회원수정처리 호출됨");
+			HttpServletRequest request) throws IllegalStateException, IOException {
+		
+		log.info("회원수정처리 호출됨:{}",editForm);
 		HttpSession session = request.getSession(false);
 		LoginMember loginMember 
 			= (LoginMember)session.getAttribute("loginMember");
@@ -161,12 +177,11 @@ public class MemberController {
 		}
 		
 		if(bindingResult.hasErrors()) {
-			log.info("errors={}",bindingResult);
+			log.info("errors={}",bindingResult);		
 			return "mypage/memberEditForm";
 		}
 		
-		
-		MemberDTO mdto = new MemberDTO();
+		MemberDTO mdto = new MemberDTO();		
 		BeanUtils.copyProperties(editForm, mdto);
 		mdto.setLetter(editForm.isLetter() ? "1" : "0");
 		
@@ -174,6 +189,7 @@ public class MemberController {
 		log.info("=={},{}",loginMember.getId(), mdto);
 		return "redirect:/members/edit";
 	}
+	
 	/**
 	 * 회원조회
 	 * @return
@@ -299,4 +315,52 @@ public class MemberController {
 		
 		return "mypage/changePwForm";
 	}
+	
+	/**
+	 * 프로파일 조회
+	 * @param session
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/profile")
+	public String profileEditForm( HttpSession session, Model model ) {
+		LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
+		log.info("loginmember:{}",loginMember);
+		MemberDTO memberDTO = memberSVC.findByEmail(loginMember.getEmail());
+		UpLoadFileDTO upLoadFileDTO = upLoadFileDAO.getFileByRid(String.valueOf(loginMember.getId()));
+		
+		ProfileForm profileForm = new ProfileForm();
+		profileForm.setNickname(memberDTO.getNickname());
+		profileForm.setSavedImgFile(upLoadFileDTO);
+		
+		model.addAttribute("profileForm", profileForm);
+		return "mypage/profileEditForm";
+	}
+	
+	/**
+	 * 별칭수정
+	 * @param nickname
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@PatchMapping("/profile/nickname")
+	public JsonResult<String> profileEdit(
+			@RequestBody String nickname,
+			HttpSession session) {
+		
+		log.info("profile:{}",nickname);
+		LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
+		
+		JsonResult<String> jsonResult = null;
+		boolean result = memberSVC.changeNickname(loginMember.getId(), nickname);
+		if(result) {
+			loginMember.setNickname(nickname);
+			session.setAttribute("loginMember", loginMember);
+			jsonResult = new JsonResult<String>("00","ok",nickname);
+		}else {
+			jsonResult = new JsonResult<String>("01","nok",nickname);
+		}
+		return jsonResult;
+	}	
 }

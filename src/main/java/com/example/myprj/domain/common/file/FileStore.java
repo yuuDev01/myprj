@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.myprj.domain.common.dto.MetaOfUploadFile;
 
+
 /**
  * 업로드 파일을 파일시스템에 저장후 
  * 업로드 파일에서 추출한 메타정보를 UpLoadFile객체에 저장
@@ -23,11 +24,17 @@ import com.example.myprj.domain.common.dto.MetaOfUploadFile;
 public class FileStore {
 
 	//첨부파일이 저장될 파일시스템의 경로 application.properties에서 정의
-	@Value("${bbs.file.path}")
-	private String filePath;
+	@Value("${file.path}")
+	private String fileRootPath;
 	
-	public String getFullPath(String fileName) {
-		return filePath + fileName;
+	public String getFullPath(String filePath,String fileName) {
+		StringBuffer str = new StringBuffer();
+		str.append(fileRootPath)	//최상위경로
+//	   	 .append("/")
+		   .append(filePath)			//중간경로(분류코드)
+		   .append("/")
+		   .append(fileName);			//파일명(서버내부용)
+		return str.toString();
 	}
 	
 	/**
@@ -37,14 +44,13 @@ public class FileStore {
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 */
-	public List<MetaOfUploadFile
-	> storeFiles(List<MultipartFile> multipartFiles) throws IllegalStateException, IOException{
+	public List<MetaOfUploadFile> storeFiles(String filePath, List<MultipartFile> multipartFiles) throws IllegalStateException, IOException{
 		
 		List<MetaOfUploadFile> storeFileResult = new ArrayList<>();
 		
 		for(MultipartFile mf : multipartFiles) {
 			if(!mf.isEmpty()) {
-				storeFileResult.add(storeFile(mf));
+				storeFileResult.add(storeFile(filePath,mf));
 			}
 		}
 		
@@ -58,7 +64,7 @@ public class FileStore {
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 */
-	public MetaOfUploadFile storeFile(MultipartFile multipartFile) throws IllegalStateException, IOException {
+	public MetaOfUploadFile storeFile(String filePath, MultipartFile multipartFile) throws IllegalStateException, IOException {
 		
 		if(multipartFile.isEmpty()) return null;
 		
@@ -69,12 +75,24 @@ public class FileStore {
 		String fsize = String.valueOf(multipartFile.getSize());
 		String ftype = multipartFile.getContentType();
 		
+		// 폴더생성
+		createFoler(filePath);
 		//파일시스템에 저장
-		multipartFile.transferTo(Path.of(getFullPath(storeFileName)));
+		multipartFile.transferTo(Path.of(getFullPath(filePath, storeFileName)));
 		
 		return new MetaOfUploadFile(storeFileName, originalFileName, fsize, ftype);
 	}
 	
+	//폴더 생성
+	private void createFoler(String filePath) {
+		String path = this.fileRootPath+filePath;
+		File folder = new File(path);
+		//폴더 존재하지않으면 생성
+		if(!folder.exists()) {
+			folder.mkdir();
+		}
+	}
+
 	// 업로드파일명에서 확장자 추출
 	private String extractExt(String originalFilename) {
 		int posOfExt = originalFilename.lastIndexOf(".");
@@ -93,11 +111,11 @@ public class FileStore {
 	 * @param fname
 	 * @return
 	 */
-	public boolean deleteFile(String fname) {
+	public boolean deleteFile(String filePath ,String fname) {
 		
 		boolean isDeleted = false;
 		
-		File file = new File(getFullPath(fname));
+		File file = new File(getFullPath(filePath, fname));
 		
 		if(file.exists()) {
 			if(file.delete()) {
@@ -108,13 +126,13 @@ public class FileStore {
 		return isDeleted;
 	}
 	
-	public boolean deleteFiles(List<String> fnames) {
+	public boolean deleteFiles(String filePath, List<String> fnames ) {
 		
 		boolean isDeleted = false;
 		int deletedFileCount = 0;
 		
 		for(String fname : fnames) {
-			if(deleteFile(fname)) {
+			if(deleteFile(filePath, fname)) {
 				deletedFileCount++;
 			};
 		}

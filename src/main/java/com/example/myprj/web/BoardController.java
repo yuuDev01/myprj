@@ -54,7 +54,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("/bbs")
 public class BoardController {
-
 	private final BoardSVC boardSVC;
 	private final CodeDAO codeDAO;
 	private final FileStore fileStore;
@@ -63,8 +62,8 @@ public class BoardController {
 	private FindCriteria fc;
 	
 	@ModelAttribute("category")
-	public List<Code> hobby(){
-		List<Code> list = codeDAO.getCode("A05");
+	public List<Code> category(){
+		List<Code> list = codeDAO.getCode("A05");  //게시판
 		log.info("code-category:{}",list);
 		return list;
 	}
@@ -109,9 +108,9 @@ public class BoardController {
 		log.info("writeForm:{}",writeForm);
 		BoardDTO boardDTO = new BoardDTO();
 		BeanUtils.copyProperties(writeForm, boardDTO);
-		
-		//첨부파일 파일시스템에 저장후 메타정보 추출
-		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(writeForm.getFiles());
+			
+		//첨부파일 파일시스템에 저장후 메타정보 추출		
+		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(cate, writeForm.getFiles());
 		//UploadFileDTO 변환
 		boardDTO.setFiles(convert(storedFiles));
 		
@@ -191,7 +190,8 @@ public class BoardController {
 		boardDTO.setBindent(pboardDTO.getBindent());
 		
 		//첨부파일 파일시스템에 저장후 메타정보 추출
-		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(replyForm.getFiles());
+		List<MetaOfUploadFile> storedFiles 
+			= fileStore.storeFiles(replyForm.getBcategory(), replyForm.getFiles());
 		//UploadFileDTO 변환
 		boardDTO.setFiles(convert(storedFiles));
 		
@@ -335,9 +335,10 @@ public class BoardController {
 		}
 		
 		BoardDTO boardDTO = new BoardDTO();
-		
+					
 		//첨부파일 파일시스템에 저장후 메타정보 추출
-		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(editForm.getFiles());
+		List<MetaOfUploadFile> storedFiles 
+			= fileStore.storeFiles(editForm.getBcategory(), editForm.getFiles());
 		//UploadFileDTO 변환
 		boardDTO.setFiles(convert(storedFiles));		
 		BeanUtils.copyProperties(editForm, boardDTO);

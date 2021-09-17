@@ -120,11 +120,11 @@ public class BoardSVCImpl implements BoardSVC{
 
 	//게시글 삭제
 	@Override
-	public void delItem(Long bnum) {
+	public void delItem(String cate, Long bnum) {
 		//게시글 삭제
 		boardDAO.delItem(bnum);
 		//서버파일 시스템에 있는 업로드 파일삭제
-		fileStore.deleteFiles(upLoadFileDAO.getStore_Fname(String.valueOf(bnum)));
+		fileStore.deleteFiles(cate,upLoadFileDAO.getStore_Fname(String.valueOf(bnum)));
 		//업로드 파일 메타정보 삭제
 		upLoadFileDAO.deleteFileByRid(String.valueOf(bnum));		
 	}

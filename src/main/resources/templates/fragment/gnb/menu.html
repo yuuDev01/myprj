@@ -19,11 +19,13 @@
 	   <li class="item">
 	     <a href="#" th:href="@{/bbs/all}" th:text="#{gnb.menu.depth1.order2}">menu2</a>
 	     <ul class="depth2">
-	       <li class="item"><a href="#" th:href="@{/bbs/list(cate=A0501)}" th:text="#{gnb.menu.depth2.order1}">menu-1</a></li>
-	       <li class="item"><a href="#" th:href="@{/bbs/list(cate=A0502)}" th:text="#{gnb.menu.depth2.order2}">menu-1</a></li>
+	       <li class="item" th:each="bbs : ${@cate}">
+	       	<a href="#" th:href="@{/bbs/list(cate=${bbs.code})}" th:text="${bbs.decode}">menu-1</a>
+	       </li>
+<!-- 	       <li class="item"><a href="#" th:href="@{/bbs/list(cate=A0502)}" th:text="#{gnb.menu.depth2.order2}">menu-1</a></li>
 	       <li class="item"><a href="#" th:href="@{/bbs/list(cate=A0503)}" th:text="#{gnb.menu.depth2.order3}">menu-1</a></li>
 	       <li class="item"><a href="#" th:href="@{/bbs/list(cate=A0504)}" th:text="#{gnb.menu.depth2.order4}">menu-1</a></li>	     
-	     </ul>
+ -->	     </ul>
 	   </li>
 	   <li class="item">
 	     <a href="#">menu3</a>
@@ -77,14 +79,18 @@
         <a href="#" th:text="#{mypage.menu.depth1.order1}">menu1</a>
         <ul class="depth2">
           <li class="item">
-          	<a href="#" th:href="@{|/members/edit|}" th:text="#{mypage.menu.depth2.order1}">menu-1</a>
+          	<a href="#" th:href="@{/members/profile}" th:text="#{mypage.menu.depth2.order1}">menu-2</a>
+          </li>        
+          <li class="item">
+          	<a href="#" th:href="@{/members/edit}" th:text="#{mypage.menu.depth2.order2}">menu-1</a>
           </li>
           <li class="item">
-          	<a href="#" th:href="@{/members/pw}" th:text="#{mypage.menu.depth2.order2}">menu-2</a>
+          	<a href="#" th:href="@{/members/pw}" th:text="#{mypage.menu.depth2.order3}">menu-2</a>
           </li>
           <li class="item">
-          	<a href="#" th:href="@{|/members/out|}" th:text="#{mypage.menu.depth2.order3}">menu-2</a>
+          	<a href="#" th:href="@{/members/out}" th:text="#{mypage.menu.depth2.order4}">menu-2</a>
           </li>
+          
         </ul>
       </li>        
     </ul>        

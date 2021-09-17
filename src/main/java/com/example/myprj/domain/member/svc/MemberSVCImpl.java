@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.myprj.domain.common.dao.UpLoadFileDAO;
 import com.example.myprj.domain.member.dao.MemberDAO;
 import com.example.myprj.domain.member.dto.MemberDTO;
 
@@ -18,7 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 //@Transactional(readOnly=true) //1.트랜잭성 보장 2.서비스층에서 사용
 public class MemberSVCImpl implements MemberSVC{
-private final MemberDAO memberDAO;
+
+	private final MemberDAO memberDAO;
+	private final UpLoadFileDAO upLoadFileDAO;
 	
 	//가입
 	@Override
@@ -39,6 +42,8 @@ private final MemberDAO memberDAO;
 		MemberDTO memberDTO = memberDAO.findByEmail(email);
 		//회원의 취미 가져오기
 		memberDTO.setHobby(memberDAO.getHobby(memberDTO.getId()));
+		//회원 이미지 정보 가져오기
+		memberDTO.setFile(upLoadFileDAO.getFileByRid(String.valueOf(memberDTO.getId())));		
 		return memberDTO;
 	}
 	
@@ -116,5 +121,12 @@ private final MemberDAO memberDAO;
 //		return isChanged;
 		
 		return memberDAO.changePw(email, prePw, postPw) == 1 ? true : false;
+	}
+	
+	//별칭 변경
+	@Override
+	public boolean changeNickname(Long id, String nickname) {
+		
+		return memberDAO.changeNickname(id, nickname) == 1 ? true : false;
 	}
 }

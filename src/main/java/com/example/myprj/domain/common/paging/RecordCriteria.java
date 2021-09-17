@@ -9,7 +9,7 @@ public class RecordCriteria {
 	private final int REC_COUNT_PER_PAGE; //한페이지에 보여줄 레코드수
 	private int startRec;									//한페이지에 보여줄 시작레코드
 	private int endRec;										//한페이지에 보여줄 종료레코드
-
+	
 	public RecordCriteria(int REC_COUNT_PER_PAGE) {
 		this.REC_COUNT_PER_PAGE = REC_COUNT_PER_PAGE;
 	}
@@ -38,13 +38,12 @@ public class RecordCriteria {
 	 * 요청페이지를 입력받아 시작레코드 종료레코드를 구한다.
 	 * @param reqPage
 	 */
-
 	public void setReqPage(int reqPage) {
 		this.reqPage = reqPage;
 		this.startRec = (reqPage - 1) * REC_COUNT_PER_PAGE + 1;
 		this.endRec = REC_COUNT_PER_PAGE * reqPage;
 	}
-
+	
 	public int getREC_COUNT_PER_PAGE() {
 		return REC_COUNT_PER_PAGE;
 	}

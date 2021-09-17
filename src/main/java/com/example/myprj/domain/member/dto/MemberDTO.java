@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.myprj.domain.common.dto.UpLoadFileDTO;
+
 import lombok.Data;
 
 @Data
@@ -22,4 +24,6 @@ public class MemberDTO {
 	private String status;
 	private	LocalDateTime cdate;//  cdate     timestamp default systimestamp,
 	private LocalDateTime udate;//  udate     timestamp,
+	
+	private UpLoadFileDTO file;	
 }

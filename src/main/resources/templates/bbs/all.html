@@ -114,7 +114,7 @@
 				            	<a href="#" th:href="@{|/bbs/${item.bnum}/|}" th:text="${item.btitle}">반갑습니다.</a>
 				            </td>
 				            <td th:text="${item.bnickname}">홍길동</td>
-				            <td th:text="${#calendars.format(item.bcdate,'yyyy-MM-dd hh:mm:ss')}">2021-09-01</td>
+				            <td th:text="${#calendars.format(item.bcdate,'yyyy-MM-dd')}">2021-09-01</td>
 				            <td th:text="${item.bhit}">10</td>
 				          </tr>
 				        </tbody>

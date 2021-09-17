@@ -21,6 +21,7 @@ public interface UpLoadFileDAO {
 	List<UpLoadFileDTO> getFiles(String rid);
 	List<UpLoadFileDTO> getFiles(String rid,String code);
 	UpLoadFileDTO getFileByFid(String fid);
+	UpLoadFileDTO getFileByRid(String rid);
 	UpLoadFileDTO getFileBySfname(String sfname);
 	
 	/**
